@@ -21,8 +21,20 @@ double getSize(context, double i) {
   return result;
 }
 
-Widget BlackTag(Color? color, double? height, double? width, String? Line1,
-    String? Line2, Image? img, bool isReverse) {
+Widget horizontalLine() {
+  return const SizedBox(
+    height: 1.5,
+    width: double.infinity,
+    child: DecoratedBox(
+      decoration: BoxDecoration(
+        color: Color.fromARGB(40, 0, 0, 0),
+      ),
+    ),
+  );
+}
+
+Widget BlackTag(context, Color? color, String? Line1, String? Line2,
+    Widget? imageWidget, bool isReverse) {
   return Container(
     alignment: Alignment.centerRight,
     child: Row(
@@ -31,8 +43,8 @@ Widget BlackTag(Color? color, double? height, double? width, String? Line1,
       children: isReverse
           ? [
               Container(
-                height: height ?? 65,
-                width: width ?? 50,
+                height: 65,
+                width: 50,
                 decoration: BoxDecoration(
                   color: color ?? Colors.black,
                   borderRadius: BorderRadius.horizontal(
@@ -41,8 +53,8 @@ Widget BlackTag(Color? color, double? height, double? width, String? Line1,
                 ),
               ),
               Container(
-                height: height ?? 65,
-                width: width ?? 300,
+                height: 65,
+                width: 300,
                 decoration: BoxDecoration(
                   color: color ?? Colors.black,
                   borderRadius: BorderRadius.horizontal(
@@ -54,10 +66,16 @@ Widget BlackTag(Color? color, double? height, double? width, String? Line1,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              500), // Clipping the image into a circle
-                          child: img),
+                      child: Container(
+                        height: 55,
+                        width: 55,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(500))),
+                        child: imageWidget,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
@@ -65,12 +83,18 @@ Widget BlackTag(Color? color, double? height, double? width, String? Line1,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            Line1 ?? "Loading...",
-                            style: tagStyle(Colors.white, 18, true),
+                          SizedBox(
+                            width: getWidth(context, 0.5),
+                            child: Text(
+                              Line1 ?? "Loading...",
+                              overflow: TextOverflow.clip,
+                              softWrap: false,
+                              style: tagStyle(Colors.white, 18, true),
+                            ),
                           ),
                           Text(
                             Line2 ?? "Loading...",
+                            overflow: TextOverflow.ellipsis,
                             style: tagStyle(Light2, 15, false),
                           ),
                         ],
@@ -82,8 +106,8 @@ Widget BlackTag(Color? color, double? height, double? width, String? Line1,
             ]
           : [
               Container(
-                height: height ?? 65,
-                width: width ?? 300,
+                height: 65,
+                width: 300,
                 decoration: BoxDecoration(
                   color: color ?? Colors.black,
                   borderRadius: BorderRadius.horizontal(
@@ -99,12 +123,18 @@ Widget BlackTag(Color? color, double? height, double? width, String? Line1,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            Line1 ?? "Loading...",
-                            style: tagStyle(Colors.white, 18, true),
+                          SizedBox(
+                            child: Text(
+                              Line1 ?? "Loading...",
+                              overflow: TextOverflow.clip,
+                              softWrap: false,
+                              style: tagStyle(Colors.white, 18, true),
+                            ),
                           ),
                           Text(
                             Line2 ?? "Loading...",
+                            overflow: TextOverflow.clip,
+                            softWrap: false,
                             style: tagStyle(Light2, 15, false),
                           ),
                         ],
@@ -115,14 +145,14 @@ Widget BlackTag(Color? color, double? height, double? width, String? Line1,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(
                               500), // Clipping the image into a circle
-                          child: img),
+                          child: imageWidget),
                     ),
                   ],
                 ),
               ),
               Container(
-                height: height ?? 65,
-                width: width ?? 50,
+                height: 65,
+                width: 50,
                 decoration: BoxDecoration(
                   color: color ?? Colors.black,
                   borderRadius: BorderRadius.horizontal(
@@ -139,48 +169,46 @@ Widget TapIcons(String name, double nameSize, String iconFilename,
     double iconSize, String route) {
   return InkWell(
     onTap: () => Get.toNamed(route),
-    child: Container(
-      height: 200,
-      width: 100,
-      child: Column(
-        children: [
-          Container(
-            height: 75,
-            width: 75,
-            decoration: BoxDecoration(
-              color: Colors.white, // background color for the icon
-              borderRadius: BorderRadius.circular(20), // rounded corners
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: iconSize,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                          "assets/images/MainIcons/$iconFilename"), // replace with your asset path
-                      fit: BoxFit.contain,
-                    ),
+    child: Column(
+      children: [
+        Container(
+          height: 75,
+          width: 75,
+          decoration: BoxDecoration(
+            color: muGrey,
+            borderRadius: BorderRadius.circular(15), // rounded corners
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: iconSize,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                        "assets/images/MainIcons/$iconFilename"), // replace with your asset path
+                    fit: BoxFit.contain,
                   ),
-                ), // Spacing between icon and text
-              ],
-            ),
+                ),
+              ), // Spacing between icon and text
+            ],
           ),
-          SizedBox(
-            height: 5,
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Text(
+          name,
+          style: TextStyle(
+            fontSize: nameSize,
+            fontFamily: "mu_reg",
+            color: muColor,
           ),
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: nameSize,
-              fontFamily: "mu_reg",
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-        ],
-      ),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     ),
   );
 }

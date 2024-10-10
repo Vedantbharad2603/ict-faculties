@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ict_faculties/Helper/Colors.dart';
 
+import 'Controller/LoginController.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -16,13 +18,18 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
 
   // FocusNodes for text fields
-  final FocusNode _grNumberFocusNode = FocusNode();
+  final FocusNode _enrollmentNumberFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
+  TextEditingController username = TextEditingController(text: "1327");
+  TextEditingController password =
+      TextEditingController(text: "ChandrasinhParmar");
+
+  LoginController loginControl = Get.put(LoginController());
   @override
   void dispose() {
     // Clean up the focus nodes when the widget is disposed
-    _grNumberFocusNode.dispose();
+    _enrollmentNumberFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
   }
@@ -60,8 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     child: TextField(
-                      focusNode: _grNumberFocusNode,
+                      focusNode: _enrollmentNumberFocusNode,
                       keyboardType: TextInputType.number,
+                      controller: username,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
                             6), // Limit to 6 characters
@@ -82,7 +90,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         prefixIcon: Icon(
                           Icons.person,
-                          color: _grNumberFocusNode.hasFocus ? Dark1 : Light2,
+                          color: _enrollmentNumberFocusNode.hasFocus
+                              ? Dark1
+                              : Light2,
                         ),
                         counterText: "", // Hide the counter
                       ),
@@ -96,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 25),
                   Container(
                     height: MediaQuery.sizeOf(context).height * 0.06,
                     width: MediaQuery.sizeOf(context).width * 0.85,
@@ -115,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextField(
                       focusNode: _passwordFocusNode,
                       obscureText: isVisible,
+                      controller: password,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
                             fontFamily: "mu_reg", color: Colors.black),
@@ -168,16 +179,32 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(fontFamily: "mu_bold"))),
                   SizedBox(height: 30),
                   InkWell(
-                    onTap: () {
-                      setState(() {
-                        isLoading = !isLoading;
-                      });
+                    onTap: () async {
+                      // setState(() {
+                      //   isLoading = !isLoading;
+                      // });
+                      //
+                      // Future.delayed(Duration(seconds: 3), () {
+                      //   setState(() {
+                      //     isLoading = !isLoading;
+                      //   });
+                      //   Get.toNamed("/dashboard");
+                      // });
 
-                      Future.delayed(Duration(seconds: 3), () {
-                        setState(() {
-                          isLoading = !isLoading;
-                        });
+                      setState(() {
+                        isLoading = true;
+                      });
+                      if (await loginControl.login(
+                          username.text, password.text)) {
                         Get.toNamed("/dashboard");
+                      } else {
+                        Get.snackbar(
+                            "Login Failed", "Email or Password is invalid",
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white);
+                      }
+                      setState(() {
+                        isLoading = false;
                       });
                     },
                     child: Container(
