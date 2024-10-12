@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ict_faculties/Helper/Colors.dart';
 
-import 'Controller/LoginController.dart';
+import '../Controller/LoginController.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,9 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _enrollmentNumberFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
-  TextEditingController username = TextEditingController(text: "1327");
-  TextEditingController password =
-      TextEditingController(text: "ChandrasinhParmar");
+  TextEditingController username = TextEditingController(text: "2614");
+  TextEditingController password = TextEditingController(text: "HarikeshChauhan");
 
   LoginController loginControl = Get.put(LoginController());
   @override
@@ -75,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             6), // Limit to 6 characters
                       ],
                       decoration: InputDecoration(
-                        labelText: 'GR number',
+                        labelText: 'Faculty ID',
                         labelStyle: const TextStyle(
                             fontFamily: "mu_reg", color: Colors.black),
                         contentPadding:

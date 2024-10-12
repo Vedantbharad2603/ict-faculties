@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:ict_faculties/DashboardScreen.dart';
-import 'package:ict_faculties/ForgotPasswordScreen.dart';
-import 'package:ict_faculties/LoginScreen.dart';
-import 'package:ict_faculties/MarkAttendance.dart';
-import 'package:ict_faculties/PlacementScreen.dart';
-import 'package:ict_faculties/SplashScreen.dart';
-import 'package:ict_faculties/TakeAttendanceScreen.dart';
+import 'package:ict_faculties/Screens/MarkAttendance.dart';
+import 'package:ict_faculties/Screens/PlacementScreen.dart';
+import 'package:ict_faculties/Screens/TakeAttendanceScreen.dart';
+
+import 'Screens/DashboardScreen.dart';
+import 'Screens/ForgotPasswordScreen.dart';
+import 'Screens/LoginScreen.dart';
+import 'Screens/SplashScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
             transition: Transition.fadeIn,
             page: () => const PlacementScreen()),
         GetPage(
-            name: "/attendance",
+            name: "/takeAttendance",
             transition: Transition.fadeIn,
             page: () => const TakeAttendanceScreen()),
         GetPage(

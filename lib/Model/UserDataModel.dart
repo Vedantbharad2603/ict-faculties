@@ -1,129 +1,69 @@
-// class UserData {
-//   ParentDetails? parentDetails;
-//   StudentDetails? studentDetails;
-//   ClassDetails? classDetails;
+class UserData {
+  String? email;
+  String? phoneNo;
+  int? id;
+  String? userLoginId;
+  String? facultyId;
+  String? firstName;
+  String? lastName;
+  int? addressInfoId;
+  String? gender;
+  String? profilePic;
+  DateTime? birthDate;
+  String? designation;
+  DateTime? joiningDate;
 
-//   UserData({this.parentDetails, this.studentDetails, this.classDetails});
+  UserData({
+    this.email,
+    this.phoneNo,
+    this.id,
+    this.userLoginId,
+    this.facultyId,
+    this.firstName,
+    this.lastName,
+    this.addressInfoId,
+    this.gender,
+    this.profilePic,
+    this.birthDate,
+    this.designation,
+    this.joiningDate,
+  });
 
-//   factory UserData.fromJson(Map<String, dynamic> json) {
-//     return UserData(
-//       parentDetails: json['parent_details'] != null
-//           ? ParentDetails.fromJson(json['parent_details'])
-//           : null,
-//       studentDetails: json['student_details'] != null
-//           ? StudentDetails.fromJson(json['student_details'])
-//           : null,
-//       classDetails: json['class_details'] != null
-//           ? ClassDetails.fromJson(json['class_details'])
-//           : null,
-//     );
-//   }
+  // Factory method to create a User instance from a JSON map
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
+      email: json['email'],
+      phoneNo: json['phone_no'],
+      id: json['id'],
+      userLoginId: json['user_login_id'],
+      facultyId: json['faculty_id'],
+      firstName: json['first_name'],
+      lastName: json['last_name'],
+      addressInfoId: json['address_info_id'],
+      gender: json['gender'],
+      profilePic: json['profile_pic'],
+      birthDate: DateTime.parse(json['birth_date']),
+      designation: json['designation'],
+      joiningDate: DateTime.parse(json['joining_date']),
+    );
+  }
 
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'parent_details': parentDetails?.toJson(),
-//       'student_details': studentDetails?.toJson(),
-//       'class_details': classDetails?.toJson(),
-//     };
-//   }
-// }
-
-// class ParentDetails {
-//   int? parentId;
-//   String? parentName;
-//   String? profession;
-//   String? email;
-//   String? phone;
-
-//   ParentDetails({this.parentId, this.parentName, this.profession, this.email, this.phone});
-
-//   factory ParentDetails.fromJson(Map<String, dynamic> json) {
-//     return ParentDetails(
-//       parentId: json['parent_id'],
-//       parentName: json['parent_name'],
-//       profession: json['profession'],
-//       email: json['p_email'],
-//       phone: json['p_phone_no'],
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'parent_id': parentId,
-//       'parent_name': parentName,
-//       'profession': profession,
-//       'p_email': email,
-//       'p_phone_no': phone,
-//     };
-//   }
-// }
-
-// class StudentDetails {
-//   int? studentId;
-//   String? enrollmentNo;
-//   String? grNo;
-//   String? firstName;
-//   String? lastName;
-//   String? course;
-//   int? batchYear;
-//   String? email;
-//   String? phone;
-
-//   StudentDetails(
-//       {this.studentId, this.enrollmentNo, this.grNo, this.firstName, this.lastName, this.course, this.batchYear, this.email, this.phone});
-
-//   factory StudentDetails.fromJson(Map<String, dynamic> json) {
-//     return StudentDetails(
-//       studentId: json['student_id'],
-//       enrollmentNo: json['enrollment_no'],
-//       grNo: json['gr_no'],
-//       firstName: json['first_name'],
-//       lastName: json['last_name'],
-//       course: json['course'],
-//       batchYear: json['batch_year'],
-//       email: json['s_email'],
-//       phone: json['s_phone_no'],
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'student_id': studentId,
-//       'enrollment_no': enrollmentNo,
-//       'gr_no': grNo,
-//       'first_name': firstName,
-//       'last_name': lastName,
-//       'course': course,
-//       'batch_year': batchYear,
-//       's_email': email,
-//       's_phone_no': phone,
-//     };
-//   }
-// }
-
-// class ClassDetails {
-//   int? classId;
-//   String? className;
-//   int? semester;
-//   String? batch;
-
-//   ClassDetails({this.classId, this.className, this.semester, this.batch});
-
-//   factory ClassDetails.fromJson(Map<String, dynamic> json) {
-//     return ClassDetails(
-//       classId: json['class_id'],
-//       className: json['classname'],
-//       semester: json['semester'],
-//       batch: json['batch'],
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'class_id': classId,
-//       'classname': className,
-//       'semester': semester,
-//       'batch': batch,
-//     };
-//   }
-// }
+  // Method to convert User instance to a JSON map
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'phone_no': phoneNo,
+      'id': id,
+      'user_login_id': userLoginId,
+      'faculty_id': facultyId,
+      'first_name': firstName,
+      'last_name': lastName,
+      'address_info_id': addressInfoId,
+      'gender': gender,
+      'profile_pic': profilePic,
+      'birth_date': birthDate?.toIso8601String(),
+      'designation': designation,
+      'joining_date': joiningDate?.toIso8601String(),
+    };
+  }
+}

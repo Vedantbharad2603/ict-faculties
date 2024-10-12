@@ -16,6 +16,7 @@ dependencies:
   get_storage: ^2.1.1
   cached_network_image: ^3.2.1
   intl: ^0.19.0
+  rename_app: ^1.6.1
 
 dev_dependencies:
   flutter_test:
@@ -29,3 +30,11 @@ flutter:
     - assets/images/
     - assets/images/MainIcons/
     - assets/gifs/
+  fonts:
+    - family: mu_reg
+      fonts:
+        - asset: assets/fonts/mu_reg.otf
+
+    - family: mu_bold
+      fonts:
+        - asset: assets/fonts/mu_bold.otf
