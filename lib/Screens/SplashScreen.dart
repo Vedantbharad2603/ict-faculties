@@ -22,9 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isLoggedIn = box.read('loggedin') ?? false;
 
     if (isLoggedIn) {
-      Get.offNamed("/dashboard");
+      Get.offAllNamed("/dashboard");
     } else {
-      Get.offNamed("/login");
+      Get.offAllNamed("/login");
     }
   }
 

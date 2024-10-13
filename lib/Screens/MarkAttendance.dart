@@ -1,4 +1,18 @@
+import 'dart:ui';
+
+import 'package:art_sweetalert/art_sweetalert.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ict_faculties/API/API.dart';
+import 'package:ict_faculties/Helper/Components.dart';
+import 'package:ict_faculties/Model/AttendanceListModel.dart';
+import 'package:ict_faculties/Screens/LoadingScreen.dart';
+import 'package:intl/intl.dart';
+import '../Controller/AttendanceController.dart';
+import '../Helper/Colors.dart';
+import '../Helper/Style.dart';
+import '../Model/ScheduleModel.dart';
 
 class MarkAttendance extends StatefulWidget {
   const MarkAttendance({super.key});
@@ -8,174 +22,573 @@ class MarkAttendance extends StatefulWidget {
 }
 
 class _MarkAttendanceState extends State<MarkAttendance> {
-  // List of 10 students with detailed information
-  final List<Map<String, dynamic>> students = [
-    {
-      'id': '001',
-      'enrollment_no': '924001',
-      'first_name': 'John',
-      'last_name': 'Doe',
-      'class': '12th Grade',
-      'batch': 'A',
-      'isPresent': false,
-    },
-    {
-      'id': '002',
-      'enrollment_no': '924002',
-      'first_name': 'Jane',
-      'last_name': 'Smith',
-      'class': '12th Grade',
-      'batch': 'A',
-      'isPresent': false,
-    },
-    {
-      'id': '003',
-      'enrollment_no': '924003',
-      'first_name': 'Michael',
-      'last_name': 'Johnson',
-      'class': '12th Grade',
-      'batch': 'B',
-      'isPresent': false,
-    },
-    {
-      'id': '004',
-      'enrollment_no': '924004',
-      'first_name': 'Emily',
-      'last_name': 'Davis',
-      'class': '12th Grade',
-      'batch': 'B',
-      'isPresent': false,
-    },
-    {
-      'id': '005',
-      'enrollment_no': '924005',
-      'first_name': 'David',
-      'last_name': 'Wilson',
-      'class': '12th Grade',
-      'batch': 'A',
-      'isPresent': false,
-    },
-    {
-      'id': '006',
-      'enrollment_no': '924006',
-      'first_name': 'Sarah',
-      'last_name': 'Brown',
-      'class': '12th Grade',
-      'batch': 'A',
-      'isPresent': false,
-    },
-    {
-      'id': '007',
-      'enrollment_no': '924007',
-      'first_name': 'Daniel',
-      'last_name': 'Jones',
-      'class': '12th Grade',
-      'batch': 'B',
-      'isPresent': false,
-    },
-    {
-      'id': '008',
-      'enrollment_no': '924008',
-      'first_name': 'Sophia',
-      'last_name': 'Garcia',
-      'class': '12th Grade',
-      'batch': 'B',
-      'isPresent': false,
-    },
-    {
-      'id': '009',
-      'enrollment_no': '924009',
-      'first_name': 'Chris',
-      'last_name': 'Martinez',
-      'class': '12th Grade',
-      'batch': 'A',
-      'isPresent': false,
-    },
-    {
-      'id': '010',
-      'enrollment_no': '924010',
-      'first_name': 'Anna',
-      'last_name': 'Lopez',
-      'class': '12th Grade',
-      'batch': 'B',
-      'isPresent': false,
-    },
-  ];
+  final AttendanceController attendanceController =
+      Get.put(AttendanceController());
+  List<dynamic>? attendanceDataList;
+  bool isLoading = false;
+  bool isUploading = false;
+  bool isSelectAll = true;
+  late DateTime selectedDate;
+  late int facultyId;
+  Schedule? scheduleData;
+
+  @override
+  void initState() {
+    super.initState(); // Debugging line
+    setState(() {
+      scheduleData = Get.arguments['lec_data'];
+      selectedDate = Get.arguments['selected_date'];
+      facultyId = Get.arguments['faculty_id'];
+    });
+    fetchAttendanceList();
+  }
+
+  Future<void> fetchAttendanceList() async {
+    setState(() {
+      isLoading = true;
+    });
+    String formatedSelectedDate = DateFormat("yyyy-MM-dd").format(selectedDate);
+    // print("START TIME +++++++ ${scheduleData!.startTime}");
+    List<dynamic>? fetchedAttendanceDataList =
+        await attendanceController.getAttendanceList(
+            scheduleData!.subjectID,
+            scheduleData!.classID,
+            facultyId,
+            formatedSelectedDate,
+            scheduleData!.startTime);
+    if (!mounted) return;
+    setState(() {
+      attendanceDataList = fetchedAttendanceDataList;
+      isLoading = false;
+    });
+  }
+
+  Future<void> uploadAttendance() async {
+    setState(() {
+      isUploading=true;
+    });
+    List<Map<String, dynamic>> attendanceData =
+        attendanceDataList!.map((attendanceList) {
+      return {
+        'subject_id': scheduleData!.subjectID,
+        'faculty_id': facultyId,
+        'student_id': attendanceList.studentID,
+        'date': DateFormat("yyyy-MM-dd").format(selectedDate),
+        'status': attendanceList.status,
+        'class_start_time': scheduleData!.startTime,
+        'class_end_time': scheduleData!.endTime,
+      };
+    }).toList();
+
+    bool success = await attendanceController.uploadAttendance(attendanceData);
+    if (success) {
+      ArtSweetAlert.show(
+        context: context,
+        barrierDismissible: false,
+        artDialogArgs:
+        ArtDialogArgs(
+          dialogPadding: EdgeInsets.only(top: 30),
+          type: ArtSweetAlertType.success,
+          sizeSuccessIcon: 70,
+          confirmButtonText: "", // Hides the confirm button
+          confirmButtonColor: Colors.white,
+          title: "Attendance Uploaded!",
+          dialogDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+      );
+      Future.delayed(const Duration(milliseconds: 1500), () {
+       Get.back();
+       Get.back();
+      });
+    } else {
+      ArtSweetAlert.show(
+        context: context,
+        barrierDismissible: false,
+        artDialogArgs:
+        ArtDialogArgs(
+          dialogPadding: EdgeInsets.only(top: 30),
+          type: ArtSweetAlertType.danger,
+          sizeSuccessIcon: 70,
+          confirmButtonText: "", // Hides the confirm button
+          confirmButtonColor: Colors.white,
+          title: "Error to upload!",
+          dialogDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+      );
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        Get.back();
+        Get.back();
+      });
+    }
+    setState(() {
+      isUploading=false;
+    });
+  }
+
+  void showStudentDetails(AttendanceList attendanceList) {
+    Get.defaultDialog(
+      title: "Student Details",
+      titleStyle:
+          TextStyle(fontFamily: 'mu_bold', fontSize: getSize(context, 2.5)),
+      titlePadding: EdgeInsets.only(left: 15, right: 15, top: 15),
+      content: Padding(
+        padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(),
+            Center(
+              child: Container(
+                height: getHeight(context, 0.15),
+                width: getWidth(context, 0.30),
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                child: Image.network(
+                  studentImageAPI(attendanceList.studentGR!),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child; // Image is loaded, show the child (the image itself).
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) =>
+                      Icon(Icons.person),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Divider(),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Enroll ',
+                      style: TextStyle(
+                          fontSize: getSize(context, 2),
+                          fontFamily: "mu_reg",
+                          color: muColor),
+                    ),
+                    Text(
+                      'Name ',
+                      style: TextStyle(
+                          fontSize: getSize(context, 2),
+                          fontFamily: "mu_reg",
+                          color: muColor),
+                    ),
+                    Text(
+                      'Class ',
+                      style: TextStyle(
+                          fontSize: getSize(context, 2),
+                          fontFamily: "mu_reg",
+                          color: muColor),
+                    ),
+                    Text(
+                      'Batch ',
+                      style: TextStyle(
+                          fontSize: getSize(context, 2),
+                          fontFamily: "mu_reg",
+                          color: muColor),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(": ${attendanceList.enrollment!}",
+                        style: TextStyle(
+                            fontSize: getSize(context, 2),
+                            fontFamily: "mu_reg",
+                            color: Colors.black),
+                      ),
+                      Text(": ${attendanceList.studentName!}",
+                        style: TextStyle(
+                            fontSize: getSize(context, 2),
+                            fontFamily: "mu_reg",
+                            color: Colors.black),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(": ${attendanceList.classname!}",
+                        style: TextStyle(
+                            fontSize: getSize(context, 2),
+                            fontFamily: "mu_reg",
+                            color: Colors.black),
+                      ),
+                      Text(": ${attendanceList.classBatch!.toUpperCase()}",
+                        style: TextStyle(
+                            fontSize: getSize(context, 2),
+                            fontFamily: "mu_reg",
+                            color: Colors.black),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Function to handle Select All checkbox behavior
+  void handleSelectAll(bool? value) {
+    setState(() {
+      isSelectAll = value!;
+      for (var attendanceList in attendanceDataList!) {
+        if (attendanceList.status != 'oe' && attendanceList.status != 'gl') {
+          attendanceList.status = isSelectAll ? 'pr' : 'ab';
+        }
+      }
+    });
+  }
+
+  // Check if all non-disabled checkboxes are selected
+  bool checkIfAllSelected() {
+    return attendanceDataList!.where((attendanceList) {
+      return attendanceList.status != 'oe' && attendanceList.status != 'gl';
+    }).every((attendanceList) => attendanceList.status == 'pr');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Attendance'),
+        title: Text("Mark Attendance", style: AppbarStyle),
+        centerTitle: true,
+        backgroundColor: muColor,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded, color: Light1),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      body: RefreshIndicator(
+        onRefresh: fetchAttendanceList,
+        backgroundColor: muColor,
+        color: Colors.white,
+        child: Stack(
           children: [
-            const SizedBox(height: 16),
-            // ListView to display the attendance information inside cards
-            Expanded(
-              child: ListView.builder(
-                itemCount: students.length,
-                itemBuilder: (context, index) {
-                  final student = students[index];
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    elevation: 2,
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'ID: ${student['id']}',
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            'Subject ',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: Colors.black),
                           ),
-                          Text('Enrollment No: ${student['enrollment_no']}'),
                           Text(
-                              'Name: ${student['first_name']} ${student['last_name']}'),
-                          Text('Class: ${student['class']}'),
-                          Text('Batch: ${student['batch']}'),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Text(
-                                'Present:',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Checkbox(
-                                value: student['isPresent'],
-                                onChanged: (value) {
-                                  setState(() {
-                                    student['isPresent'] = value ?? false;
-                                  });
-                                },
-                                checkColor: Colors.white,
-                                activeColor: Colors.green,
-                              ),
-                            ],
+                            'Class ',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: Colors.black),
+                          ),
+                          Text(
+                            'Time ',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: Colors.black),
+                          ),
+                          Text(
+                            'Location ',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: Colors.black),
+                          ),
+                          Text(
+                            'Date ',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: Colors.black),
                           ),
                         ],
                       ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ': ${scheduleData!.shortName} - [${scheduleData!.subjectCode}]',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: muColor),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                ": ${scheduleData!.className}",
+                                style: TextStyle(
+                                    fontSize: getSize(context, 2),
+                                    fontFamily: "mu_bold",
+                                    color: muColor),
+                              ),
+                              SizedBox(width: getWidth(context, 0.1)),
+                              Text(
+                                'Batch ',
+                                style: TextStyle(
+                                    fontSize: getSize(context, 2),
+                                    fontFamily: "mu_bold",
+                                    color: Colors.black),
+                              ),
+                              Text(
+                                ": ${scheduleData!.batch.toUpperCase()}",
+                                style: TextStyle(
+                                    fontSize: getSize(context, 2),
+                                    fontFamily: "mu_bold",
+                                    color: muColor),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            ': ${scheduleData!.startTime.substring(0, 5)}  to  ${scheduleData!.endTime.substring(0, 5)}',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: muColor),
+                          ),
+                          Text(
+                            ': ${scheduleData!.classLocation}',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: muColor),
+                          ),
+                          Text(
+                            ': ${DateFormat('dd / MM / yyyy').format(selectedDate)}',
+                            style: TextStyle(
+                                fontSize: getSize(context, 2),
+                                fontFamily: "mu_bold",
+                                color: muColor),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Checkbox(
+                        value: isSelectAll,
+                        onChanged: (value) {
+                          handleSelectAll(value);
+                        },
+                        activeColor: muColor,
+                      ),
+                      Text(
+                        'Select All',
+                        style: TextStyle(
+                            fontFamily: "mu_bold", fontSize: getSize(context, 2.5)),
+                      ),
+                    ],
+                  ),
+                  Divider(),
+                  Expanded(
+                    child: isLoading
+                        ? Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(
+                                color: muColor,
+                                strokeWidth: 3,
+                              ),
+                            ),
+                          )
+                        : attendanceDataList != null &&
+                                attendanceDataList!.isNotEmpty
+                            ? GridView.builder(
+                                shrinkWrap: true,
+                                itemCount: attendanceDataList!.length,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, // 2 items per row
+                                  crossAxisSpacing:
+                                      10.0, // spacing between items horizontally
+                                  mainAxisSpacing:
+                                      5.0, // spacing between items vertically
+                                  childAspectRatio:
+                                      3, // controls the size of each tile, adjust this for the desired look
+                                ),
+                                itemBuilder: (context, index) {
+                                  AttendanceList attendanceList =
+                                      attendanceDataList![index];
+                                  bool isDisabled = attendanceList.status == 'oe' ||
+                                      attendanceList.status == 'gl';
+
+                                  return InkWell(
+                                    onLongPress: () =>
+                                        showStudentDetails(attendanceList),
+                                    onTap: isDisabled
+                                        ? null
+                                        : () {
+                                            setState(() {
+                                              attendanceList.status =
+                                                  attendanceList.status == 'pr'
+                                                      ? 'ab'
+                                                      : 'pr';
+                                              isSelectAll = checkIfAllSelected();
+                                            });
+                                          },
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.symmetric(vertical: 5.0),
+                                      child: Container(
+                                        height: getHeight(context, 0.05),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            width: 2,
+                                            color: isDisabled
+                                                ? Colors.green
+                                                : attendanceList.status == "pr"
+                                                    ? muColor
+                                                    : Colors.red,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(500.0),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(left: 8.0),
+                                              child: Text(
+                                                attendanceList.enrollment!,
+                                                style: TextStyle(
+                                                  fontFamily: 'mu_reg',
+                                                  fontSize: getSize(context, 2.3),
+                                                  color: isDisabled
+                                                      ? Colors.green
+                                                      : attendanceList.status ==
+                                                              "pr"
+                                                          ? muColor
+                                                          : Colors.red,
+                                                ),
+                                              ),
+                                            ),
+                                            Checkbox(
+                                              value: attendanceList.status == 'pr',
+                                              onChanged: isDisabled
+                                                  ? null
+                                                  : (value) {
+                                                      setState(() {
+                                                        attendanceList.status =
+                                                            value! ? 'pr' : 'ab';
+                                                        isSelectAll =
+                                                            checkIfAllSelected();
+                                                      });
+                                                    },
+                                              checkColor: Colors.white,
+                                              side: BorderSide(
+                                                color: isDisabled
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                                width: 2,
+                                              ),
+                                              activeColor: isDisabled
+                                                  ? Colors.green
+                                                  : attendanceList.status == "pr"
+                                                      ? muColor
+                                                      : Colors.red,
+                                              fillColor: isDisabled
+                                                  ? MaterialStateProperty
+                                                      .resolveWith<Color>(
+                                                      (Set<MaterialState> states) {
+                                                        return Colors
+                                                            .green; // Disabled state color
+                                                      },
+                                                    )
+                                                  : null,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : const Center(
+                                child: Text('No attendance data available')),
+                  ),
+                  // Save button
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: FloatingActionButton.extended(
+                      onPressed: (){
+                        ArtSweetAlert.show(
+                          context: context,
+                          artDialogArgs:
+                          ArtDialogArgs(
+                            type: ArtSweetAlertType.question,
+                            sizeSuccessIcon: 70,
+                            confirmButtonText: "SUBMIT", // Hides the confirm button
+                            confirmButtonColor: muColor,
+                            onConfirm: () async {
+                              Get.back();
+                              uploadAttendance();
+                            },
+                            title: "Confirm Attendance",
+                            dialogDecoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: muColor,
+                      icon: Icon(
+                        Icons.save,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        "Upload",
+                        style:
+                            TextStyle(fontFamily: 'mu_bold', color: Colors.white),
+                      ),
                     ),
-                  );
-                },
+                  )
+                ],
               ),
             ),
-            // Save button
-            Align(
-              alignment: Alignment.centerRight,
-              child: FloatingActionButton(
-                onPressed: () {
-                  // Handle save action
-                },
-                child: const Icon(Icons.save),
-              ),
-            ),
+            isUploading?LoadingScreen():Container(),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:ict_faculties/Screens/EngagaedStudentScreen.dart';
 import 'package:ict_faculties/Screens/MarkAttendance.dart';
 import 'package:ict_faculties/Screens/PlacementScreen.dart';
 import 'package:ict_faculties/Screens/TakeAttendanceScreen.dart';
@@ -39,9 +40,9 @@ class MyApp extends StatelessWidget {
             transition: Transition.fadeIn,
             page: () => const DashboardScreen()),
         GetPage(
-            name: "/placement",
+            name: "/engagedStudent",
             transition: Transition.fadeIn,
-            page: () => const PlacementScreen()),
+            page: () => const EngagedStudent()),
         GetPage(
             name: "/takeAttendance",
             transition: Transition.fadeIn,

@@ -22,6 +22,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
   List<Schedule>? scheduleDataList;
   DateTime selectedDate = DateTime.now();
   bool isLoading = false;
+  late int facultyId;
 
   @override
   void initState() {
@@ -32,7 +33,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
     setState(() {
       isLoading=true;
     });
-    int facultyId = Get.arguments['faculty_id'];
+    facultyId = Get.arguments['faculty_id'];
     String todayDate = DateFormat('yyyy-MM-dd').format(selectedDate);
     List<Schedule>? fetchedScheduleDataList = await attendanceController.getSchedule(facultyId,todayDate);
     if (!mounted) return;
@@ -85,7 +86,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
     return Scaffold(
       backgroundColor: muGrey,
       appBar: AppBar(
-        title: Text("Schedule Attendance", style: AppbarStyle),
+        title: Text("Student Attendance", style: AppbarStyle),
         centerTitle: true,
         backgroundColor: muColor,
         leading: IconButton(
@@ -140,18 +141,22 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                   Schedule schedule = scheduleDataList![index];
                   return scheduleCard(
                       context,
+                      facultyId,
                       schedule.sem,
                       schedule.eduType,
+                      schedule.subjectID,
                       schedule.subjectName,
                       schedule.shortName,
                       schedule.subjectType,
                       schedule.subjectCode,
+                      schedule.classID,
                       schedule.className,
                       schedule.batch,
                       schedule.classLocation,
                       schedule.startTime,
                       schedule.endTime,
-                      selectedDate.toString()
+                      selectedDate,
+                      schedule
                   );
                               },
                             ),
