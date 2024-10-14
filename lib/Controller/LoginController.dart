@@ -11,9 +11,10 @@ class LoginController extends GetxController {
 
   Future<bool> login(String username, String password) async {
     try {
+      print("USERNAME = $username AND PASSWORD = $password");
       Map<String, String> body = {
         'username': username,
-        'password': password,
+        'password': password
       };
 
       final response = await http.post(

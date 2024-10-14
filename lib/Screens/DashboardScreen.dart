@@ -92,7 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 fit: BoxFit.cover,
               ),
-              true,
+              false,
             ),
             SizedBox(height: 20),
 
@@ -114,7 +114,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   padding: EdgeInsets.all(10), // Padding for the GridView
                   children: [
                     TapIcons(context, "Take Attendance", 2, "attendance.png", 45, "/takeAttendance", {'faculty_id': userData.id}),
-                    TapIcons(context, "Student Engaged", 2, "attendance.png", 45, "/engagedStudent", {'faculty_id': userData.id,'faculty_designation':userData.designation}),
+                    TapIcons(context, "Student Engaged", 2, "attendance.png", 45, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
                   ],
                 ),
               ),

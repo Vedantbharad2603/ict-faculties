@@ -27,7 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
   LoginController loginControl = Get.put(LoginController());
   @override
   void dispose() {
-    // Clean up the focus nodes when the widget is disposed
     _enrollmentNumberFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
@@ -182,8 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       setState(() {
                         isLoading = true;
                       });
-                      if (await loginControl.login(
-                          username.text, password.text)) {
+                      if (await loginControl.login(username.text, password.text)) {
                         Get.offAllNamed("/dashboard");
                       } else {
                         Get.snackbar(
