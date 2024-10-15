@@ -278,6 +278,7 @@ scheduleCard(
     String classname,
     String batch,
     String classLoc,
+    String lecType,
     String startTime,
     String endTime,
     DateTime selectedDate,
@@ -320,8 +321,9 @@ scheduleCard(
                                 fontWeight: FontWeight.bold,
                                 fontSize: getSize(context, 2.25)),
                           ),
+
                           Text(
-                            "  - $subType",
+                            "  - ${subType}",
                             style: TextStyle(
                                 color: muColor,
                                 fontFamily: "mu_reg",
@@ -474,18 +476,18 @@ scheduleCard(
         Padding(
           padding: const EdgeInsets.only(left: 25.0),
           child: Container(
-            width: getWidth(context, 0.42),
+            width: getWidth(context, 0.6),
             height: getHeight(context, 0.045),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(500),
                 border: Border.all(color: muColor)),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Sem - $sem",
+                  "Sem - $sem -",
                   style: TextStyle(
                       color: muColor,
                       fontFamily: "mu_reg",
@@ -497,7 +499,14 @@ scheduleCard(
                       color: Colors.black,
                       fontFamily: "mu_bold",
                       fontSize: getSize(context, 2.25)),
-                )
+                ),
+                Text(
+                  "- ${lecType=="L"?"Lab":"Theory"}",
+                  style: TextStyle(
+                      color: muColor,
+                      fontFamily: "mu_reg",
+                      fontSize: getSize(context, 2.25)),
+                ),
               ],
             ),
           ),

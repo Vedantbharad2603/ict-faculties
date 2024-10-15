@@ -1,4 +1,4 @@
-String Host = "https://2e6c-2409-40c1-302d-c3c7-298e-e3cd-99c7-240.ngrok-free.app";
+String Host = "https://e278-2409-40c1-302b-b113-5995-cad3-4130-89b7.ngrok-free.app";
 // String Host = "http://localhost";
 
 String validateLoginAPI = '$Host/icttest/api.php/LoginFaculty';

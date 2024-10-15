@@ -44,4 +44,16 @@ class AttendanceList {
       'status':status
     };
   }
+
+  AttendanceList copyWith({String? newStatus}) {
+    return AttendanceList(
+      studentID: this.studentID,
+      enrollment: this.enrollment,
+      studentGR: this.studentGR,
+      studentName: this.studentName,
+      classname: this.classname,
+      classBatch: this.classBatch,
+      status: newStatus ?? this.status,
+    );
+  }
 }

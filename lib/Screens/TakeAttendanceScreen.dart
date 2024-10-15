@@ -153,6 +153,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                       schedule.className,
                       schedule.batch,
                       schedule.classLocation,
+                      schedule.lecType,
                       schedule.startTime,
                       schedule.endTime,
                       selectedDate,

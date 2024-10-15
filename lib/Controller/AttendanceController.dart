@@ -85,10 +85,12 @@ class AttendanceController extends GetxController {
           "status": attendance['status'],
           "class_start_time": attendance['class_start_time'],
           "class_end_time": attendance['class_end_time'],
+          "lec_type":attendance['lec_type']
         };
       }).toList();
 
-      print("Sending data: ${json.encode(body)}");
+      print("Sending data: ");
+      print(json.encode(body));
 
       final response = await http.post(
         Uri.parse(uploadAttendanceAPI),

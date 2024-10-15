@@ -25,6 +25,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
   final AttendanceController attendanceController =
       Get.put(AttendanceController());
   List<dynamic>? attendanceDataList;
+  List<dynamic>? attendanceDataCopyList;
   bool isLoading = false;
   bool isUploading = false;
   bool isSelectAll = true;
@@ -48,45 +49,81 @@ class _MarkAttendanceState extends State<MarkAttendance> {
       isLoading = true;
     });
     String formatedSelectedDate = DateFormat("yyyy-MM-dd").format(selectedDate);
-    // print("START TIME +++++++ ${scheduleData!.startTime}");
     List<dynamic>? fetchedAttendanceDataList =
-        await attendanceController.getAttendanceList(
-            scheduleData!.subjectID,
-            scheduleData!.classID,
-            facultyId,
-            formatedSelectedDate,
-            scheduleData!.startTime);
+    await attendanceController.getAttendanceList(
+        scheduleData!.subjectID,
+        scheduleData!.classID,
+        facultyId,
+        formatedSelectedDate,
+        scheduleData!.startTime);
     if (!mounted) return;
     setState(() {
       attendanceDataList = fetchedAttendanceDataList;
+      createAttendanceCopy();
       isLoading = false;
     });
   }
+  Future<void> createAttendanceCopy() async {
+    setState(() {
+      // Create a copy of the attendance list and update status for 'na' to 'pr'
+      attendanceDataCopyList = attendanceDataList?.map((attendance) {
+        if (attendance is AttendanceList) {
+          AttendanceList copiedAttendance = attendance.copyWith(
+            newStatus: attendance.status == 'na' ? 'pr' : attendance.status,
+          );
+          return copiedAttendance;
+        } else {
+          return Map<String, dynamic>.from(attendance);
+        }
+      }).toList();
+    });
+
+    // Debugging: print the original attendance data
+    // print("Original Attendance Data:");
+    // attendanceDataList?.forEach((attendance) {
+    //   print(attendance);
+    // });
+    //
+    // print("Copied Attendance Data (with 'na' status changed to 'pr'):");
+    // attendanceDataCopyList?.forEach((attendance) {
+    //   print(attendance);
+    // });
+  }
+
 
   Future<void> uploadAttendance() async {
     setState(() {
-      isUploading=true;
+      isUploading = true;
     });
-    List<Map<String, dynamic>> attendanceData =
-        attendanceDataList!.map((attendanceList) {
-      return {
-        'subject_id': scheduleData!.subjectID,
-        'faculty_id': facultyId,
-        'student_id': attendanceList.studentID,
-        'date': DateFormat("yyyy-MM-dd").format(selectedDate),
-        'status': attendanceList.status,
-        'class_start_time': scheduleData!.startTime,
-        'class_end_time': scheduleData!.endTime,
-      };
-    }).toList();
 
+    // Find items where the 'status' in attendanceDataList and attendanceDataCopyList are different
+    List<Map<String, dynamic>> attendanceData = [];
+
+    for (int i = 0; i < attendanceDataCopyList!.length; i++) {
+      // Check if the status is different in both lists
+      if (attendanceDataList![i].status != attendanceDataCopyList![i].status) {
+        attendanceData.add({
+          'subject_id': scheduleData!.subjectID,
+          'faculty_id': facultyId,
+          'student_id': attendanceDataCopyList![i].studentID,
+          'date': DateFormat("yyyy-MM-dd").format(selectedDate),
+          'status': attendanceDataCopyList![i].status, // The status from the original list
+          'class_start_time': scheduleData!.startTime,
+          'class_end_time': scheduleData!.endTime,
+          'lec_type':scheduleData!.lecType
+        });
+      }
+    }
+
+    // Upload only the attendance data where the status is different
     bool success = await attendanceController.uploadAttendance(attendanceData);
+
+    // Show success or error alert based on the result
     if (success) {
       ArtSweetAlert.show(
         context: context,
         barrierDismissible: false,
-        artDialogArgs:
-        ArtDialogArgs(
+        artDialogArgs: ArtDialogArgs(
           dialogPadding: EdgeInsets.only(top: 30),
           type: ArtSweetAlertType.success,
           sizeSuccessIcon: 70,
@@ -100,15 +137,14 @@ class _MarkAttendanceState extends State<MarkAttendance> {
         ),
       );
       Future.delayed(const Duration(milliseconds: 1500), () {
-       Get.back();
-       Get.back();
+        Get.back();
+        Get.back();
       });
     } else {
       ArtSweetAlert.show(
         context: context,
         barrierDismissible: false,
-        artDialogArgs:
-        ArtDialogArgs(
+        artDialogArgs: ArtDialogArgs(
           dialogPadding: EdgeInsets.only(top: 30),
           type: ArtSweetAlertType.danger,
           sizeSuccessIcon: 70,
@@ -123,11 +159,11 @@ class _MarkAttendanceState extends State<MarkAttendance> {
       );
       Future.delayed(const Duration(milliseconds: 1500), () {
         Get.back();
-        Get.back();
       });
     }
+
     setState(() {
-      isUploading=false;
+      isUploading = false;
     });
   }
 
@@ -254,7 +290,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
   void handleSelectAll(bool? value) {
     setState(() {
       isSelectAll = value!;
-      for (var attendanceList in attendanceDataList!) {
+      for (var attendanceList in attendanceDataCopyList!) {
         if (attendanceList.status != 'oe' && attendanceList.status != 'gl') {
           attendanceList.status = isSelectAll ? 'pr' : 'ab';
         }
@@ -264,7 +300,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
 
   // Check if all non-disabled checkboxes are selected
   bool checkIfAllSelected() {
-    return attendanceDataList!.where((attendanceList) {
+    return attendanceDataCopyList!.where((attendanceList) {
       return attendanceList.status != 'oe' && attendanceList.status != 'gl';
     }).every((attendanceList) => attendanceList.status == 'pr');
   }
@@ -420,133 +456,133 @@ class _MarkAttendanceState extends State<MarkAttendance> {
                   Expanded(
                     child: isLoading
                         ? Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircularProgressIndicator(
-                                color: muColor,
-                                strokeWidth: 3,
-                              ),
-                            ),
-                          )
-                        : attendanceDataList != null &&
-                                attendanceDataList!.isNotEmpty
-                            ? GridView.builder(
-                                shrinkWrap: true,
-                                itemCount: attendanceDataList!.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2, // 2 items per row
-                                  crossAxisSpacing:
-                                      10.0, // spacing between items horizontally
-                                  mainAxisSpacing:
-                                      5.0, // spacing between items vertically
-                                  childAspectRatio:
-                                      3, // controls the size of each tile, adjust this for the desired look
-                                ),
-                                itemBuilder: (context, index) {
-                                  AttendanceList attendanceList =
-                                      attendanceDataList![index];
-                                  bool isDisabled = attendanceList.status == 'oe' ||
-                                      attendanceList.status == 'gl';
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(
+                          color: muColor,
+                          strokeWidth: 3,
+                        ),
+                      ),
+                    )
+                        : attendanceDataCopyList != null &&
+                        attendanceDataCopyList!.isNotEmpty
+                        ? GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: attendanceDataCopyList!.length,
+                      gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // 2 items per row
+                        crossAxisSpacing:
+                        10.0, // spacing between items horizontally
+                        mainAxisSpacing:
+                        5.0, // spacing between items vertically
+                        childAspectRatio:
+                        3, // controls the size of each tile, adjust this for the desired look
+                      ),
+                      itemBuilder: (context, index) {
+                        AttendanceList attendanceList =
+                        attendanceDataCopyList![index];
+                        bool isDisabled = attendanceList.status == 'oe' ||
+                            attendanceList.status == 'gl';
 
-                                  return InkWell(
-                                    onLongPress: () =>
-                                        showStudentDetails(attendanceList),
-                                    onTap: isDisabled
-                                        ? null
-                                        : () {
-                                            setState(() {
-                                              attendanceList.status =
-                                                  attendanceList.status == 'pr'
-                                                      ? 'ab'
-                                                      : 'pr';
-                                              isSelectAll = checkIfAllSelected();
-                                            });
-                                          },
-                                    highlightColor: Colors.transparent,
-                                    splashColor: Colors.transparent,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.symmetric(vertical: 5.0),
-                                      child: Container(
-                                        height: getHeight(context, 0.05),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            width: 2,
-                                            color: isDisabled
-                                                ? Colors.green
-                                                : attendanceList.status == "pr"
-                                                    ? muColor
-                                                    : Colors.red,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(500.0),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(left: 8.0),
-                                              child: Text(
-                                                attendanceList.enrollment!,
-                                                style: TextStyle(
-                                                  fontFamily: 'mu_reg',
-                                                  fontSize: getSize(context, 2.3),
-                                                  color: isDisabled
-                                                      ? Colors.green
-                                                      : attendanceList.status ==
-                                                              "pr"
-                                                          ? muColor
-                                                          : Colors.red,
-                                                ),
-                                              ),
-                                            ),
-                                            Checkbox(
-                                              value: attendanceList.status == 'pr',
-                                              onChanged: isDisabled
-                                                  ? null
-                                                  : (value) {
-                                                      setState(() {
-                                                        attendanceList.status =
-                                                            value! ? 'pr' : 'ab';
-                                                        isSelectAll =
-                                                            checkIfAllSelected();
-                                                      });
-                                                    },
-                                              checkColor: Colors.white,
-                                              side: BorderSide(
-                                                color: isDisabled
-                                                    ? Colors.green
-                                                    : Colors.red,
-                                                width: 2,
-                                              ),
-                                              activeColor: isDisabled
-                                                  ? Colors.green
-                                                  : attendanceList.status == "pr"
-                                                      ? muColor
-                                                      : Colors.red,
-                                              fillColor: isDisabled
-                                                  ? MaterialStateProperty
-                                                      .resolveWith<Color>(
-                                                      (Set<MaterialState> states) {
-                                                        return Colors
-                                                            .green; // Disabled state color
-                                                      },
-                                                    )
-                                                  : null,
-                                            ),
-                                          ],
-                                        ),
+                        return InkWell(
+                          onLongPress: () =>
+                              showStudentDetails(attendanceList),
+                          onTap: isDisabled
+                              ? null
+                              : () {
+                            setState(() {
+                              attendanceList.status =
+                              attendanceList.status == 'pr'
+                                  ? 'ab'
+                                  : 'pr';
+                              isSelectAll = checkIfAllSelected();
+                            });
+                          },
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          child: Padding(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 5.0),
+                            child: Container(
+                              height: getHeight(context, 0.05),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  width: 2,
+                                  color: isDisabled
+                                      ? Colors.green
+                                      : attendanceList.status == "pr"
+                                      ? muColor
+                                      : Colors.red,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(500.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      attendanceList.enrollment!,
+                                      style: TextStyle(
+                                        fontFamily: 'mu_reg',
+                                        fontSize: getSize(context, 2.3),
+                                        color: isDisabled
+                                            ? Colors.green
+                                            : attendanceList.status ==
+                                            "pr"
+                                            ? muColor
+                                            : Colors.red,
                                       ),
                                     ),
-                                  );
-                                },
-                              )
-                            : const Center(
-                                child: Text('No attendance data available')),
+                                  ),
+                                  Checkbox(
+                                    value: attendanceList.status == 'pr',
+                                    onChanged: isDisabled
+                                        ? null
+                                        : (value) {
+                                      setState(() {
+                                        attendanceList.status =
+                                        value! ? 'pr' : 'ab';
+                                        isSelectAll =
+                                            checkIfAllSelected();
+                                      });
+                                    },
+                                    checkColor: Colors.white,
+                                    side: BorderSide(
+                                      color: isDisabled
+                                          ? Colors.green
+                                          : Colors.red,
+                                      width: 2,
+                                    ),
+                                    activeColor: isDisabled
+                                        ? Colors.green
+                                        : attendanceList.status == "pr"
+                                        ? muColor
+                                        : Colors.red,
+                                    fillColor: isDisabled
+                                        ? MaterialStateProperty
+                                        .resolveWith<Color>(
+                                          (Set<MaterialState> states) {
+                                        return Colors
+                                            .green; // Disabled state color
+                                      },
+                                    )
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                        : const Center(
+                        child: Text('No attendance data available')),
                   ),
                   // Save button
                   Align(
@@ -581,7 +617,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
                       label: Text(
                         "Upload",
                         style:
-                            TextStyle(fontFamily: 'mu_bold', color: Colors.white),
+                        TextStyle(fontFamily: 'mu_bold', color: Colors.white),
                       ),
                     ),
                   )

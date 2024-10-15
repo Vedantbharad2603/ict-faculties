@@ -10,6 +10,7 @@ class Schedule {
   String className;
   String batch;
   String classLocation;
+  String lecType;
   String startTime;
   String endTime;
 
@@ -25,6 +26,7 @@ class Schedule {
     required this.className,
     required this.batch,
     required this.classLocation,
+    required this.lecType,
     required this.startTime,
     required this.endTime,
   });
@@ -42,6 +44,7 @@ class Schedule {
       className: json['classname'] ?? '${json['short_name']}',
       batch: json['batch'] ?? 'ALL',
       classLocation: json['class_location'] ?? '',
+      lecType: json['lec_type'],
       startTime: json['start_time'] ?? '00:00',
       endTime: json['end_time'] ?? '00:00',
     );
@@ -60,6 +63,7 @@ class Schedule {
       'classname': className,
       'batch': batch,
       'class_location': classLocation,
+      'lec_type':lecType,
       'class_start_time': startTime,
       'class_end_time': endTime,
     };
