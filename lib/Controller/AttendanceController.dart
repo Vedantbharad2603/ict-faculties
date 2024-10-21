@@ -109,4 +109,32 @@ class AttendanceController extends GetxController {
       return false;
     }
   }
+
+  Future<bool> upsertEngagedStudent(int studentId,int facultyId,String reason,String type,String startDate,String endDate) async {
+    print('$studentId --- $facultyId --- $reason --- $type --- $startDate --- $endDate');
+    try {
+      Map<String, dynamic> body = {
+        'student_info_id':studentId,
+        'reason':reason,
+        'type':type,
+        'faculty_info_id':facultyId,
+        'start_date':startDate,
+        'end_date':endDate
+      };
+
+      final response = await http.post(
+        Uri.parse(upsertEngagedStudentAPI),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
 }

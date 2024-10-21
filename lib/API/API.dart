@@ -1,12 +1,16 @@
-String Host = "https://e278-2409-40c1-302b-b113-5995-cad3-4130-89b7.ngrok-free.app";
-// String Host = "http://localhost";
+String Host = "https://f6be-2409-40c1-300b-4bf0-6d8c-567c-6b9a-4d74.ngrok-free.app";
+String Path = "/ict-server/api.php";
 
-String validateLoginAPI = '$Host/icttest/api.php/LoginFaculty';
-String getScheduleAPI = '$Host/icttest/api.php/GetFacultySchedule';
-String getAttendanceListAPI = '$Host/icttest/api.php/GetAttendanceList';
-String uploadAttendanceAPI = '$Host/icttest/api.php/UploadAttendance';
-String getStudentByCC = '$Host/icttest/api.php/GetStudentsByCC';
-String getEngagedStudentByCC = '$Host/icttest/api.php/GetEngagedStudentsByCC';
+String CurrentVersion = "1.0";
+
+String validateLoginAPI = '$Host$Path/LoginFaculty';
+String validateVersionAPI = '$Host$Path/ValidateVersion';
+String getScheduleAPI = '$Host$Path/GetFacultySchedule';
+String getAttendanceListAPI = '$Host$Path/GetAttendanceList';
+String uploadAttendanceAPI = '$Host$Path/UploadAttendance';
+String getStudentByCCAPI = '$Host$Path/GetStudentsByCC';
+String getEngagedStudentByCCAPI = '$Host$Path/GetEngagedStudentsByCC';
+String upsertEngagedStudentAPI = '$Host$Path/UpsertEngagedStudent';
 
 String studentImageAPI(gr){
   String api = "https://student.marwadiuniversity.ac.in:553/handler/getImage.ashx?SID=$gr";

@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ict_faculties/Helper/Components.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../API/API.dart';
+import '../Controller/LoginController.dart';
 import '../Helper/Colors.dart';
 import '../Model/UserDataModel.dart';
 
@@ -18,9 +21,11 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final box = GetStorage();
   late UserData userData;
+  LoginController loginControl = Get.put(LoginController());
 
   @override
   void initState() {
+    _checkUpdated();
     super.initState();
     Map<String, dynamic> storedData = box.read('userdata');
     print("from dashboard");
@@ -45,6 +50,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return userData.designation;
     }
   }
+
+  _checkUpdated() async {
+
+    if(!await loginControl.checkVersion('faculty',CurrentVersion))
+    {
+      ArtSweetAlert.show(
+        barrierDismissible: false,
+        context: context,
+        artDialogArgs:
+        ArtDialogArgs(
+          type: ArtSweetAlertType.warning,
+          sizeSuccessIcon: 70,
+          confirmButtonText: "Update Now", // Hides the confirm button
+          confirmButtonColor: muColor,
+          onConfirm: () async {
+            String url = 'https://devanpatel28.blogspot.com/';
+            await launch(url);
+          },
+          title: "App update available!",
+          dialogDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

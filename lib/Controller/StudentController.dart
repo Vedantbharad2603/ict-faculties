@@ -11,7 +11,7 @@ class StudentController extends GetxController {
       };
 
       final response = await http.post(
-        Uri.parse(getStudentByCC),
+        Uri.parse(getStudentByCCAPI),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(body),
       );
@@ -37,7 +37,7 @@ class StudentController extends GetxController {
       };
 
       final response = await http.post(
-        Uri.parse(getEngagedStudentByCC),
+        Uri.parse(getEngagedStudentByCCAPI),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(body),
       );

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ict_faculties/Controller/StudentController.dart';
 import 'package:ict_faculties/Helper/Components.dart';
+import 'package:ict_faculties/Screens/LoadingScreen.dart';
 import 'package:intl/intl.dart'; // To format dates
-
 import '../Helper/Colors.dart';
 import '../Helper/Style.dart';
 
@@ -19,7 +19,7 @@ class _EngagedStudentState extends State<EngagedStudent> {
   late int facId;
   late String facDesignation;
   bool isLoading = false;
-  List<dynamic>? studentsDataList;
+  // List<dynamic>? studentsDataList;
   List<dynamic>? engagedStudentsDataList;
   List<dynamic>? filteredStudentsDataList;
   final StudentController studentController = Get.put(StudentController());
@@ -32,23 +32,9 @@ class _EngagedStudentState extends State<EngagedStudent> {
       facId = Get.arguments['faculty_id'];
       facDesignation = Get.arguments['faculty_des'];
     });
-    fetchStudentDetail();
     fetchEngagedStudentDetail();
   }
 
-  Future<void> fetchStudentDetail() async {
-    setState(() {
-      isLoading = true;
-    });
-    List<dynamic>? fetchedStudentDataList =
-        await studentController.getStudentsByCC(facId);
-    if (!mounted) return;
-    setState(() {
-      studentsDataList = fetchedStudentDataList;
-      print(studentsDataList);
-      isLoading = false;
-    });
-  }
 
   Future<void> fetchEngagedStudentDetail() async {
     setState(() {
@@ -111,10 +97,15 @@ class _EngagedStudentState extends State<EngagedStudent> {
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: muColor,
+          child: Icon(Icons.person_add_alt_1_rounded,color: muGrey,),
+          onPressed: ()=>Get.toNamed("/addEngagedStudent",arguments: {'faculty_id': facId,'faculty_des':facDesignation})
+      ),
       body: isLoading
           ? Center(
               child:
-                  CircularProgressIndicator()) // Show loading spinner while data is fetching
+                  LoadingScreen())
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -126,7 +117,6 @@ class _EngagedStudentState extends State<EngagedStudent> {
                       ? Center(
                         child: SingleChildScrollView(
                             child: SizedBox(
-                              width: getWidth(context,1),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -235,7 +225,7 @@ class _EngagedStudentState extends State<EngagedStudent> {
     return ChoiceChip(
       elevation: 5,
       label: Container(
-        width: getWidth(context, 0.2),
+        width: getWidth(context, isHOD()?0.15:0.2),
           height: getHeight(context, 0.03),
           child: Align(alignment:Alignment.center,child: Text(label))
       ),
@@ -252,7 +242,7 @@ class _EngagedStudentState extends State<EngagedStudent> {
       showCheckmark: false,
       labelStyle: TextStyle(
           fontFamily: 'mu_bold',
-          fontSize: getSize(context, 2.1),
+          fontSize: getSize(context, isHOD()?1.7:2),
           color: selectedFilter == label ? Colors.white : Colors.black),
       backgroundColor: Colors.grey[200],
     );
