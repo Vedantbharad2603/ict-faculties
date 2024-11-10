@@ -22,13 +22,13 @@ class AttendanceList {
   }
   factory AttendanceList.fromJson(Map<String, dynamic> json) {
     return AttendanceList(
-        studentID: json['studentId'],
-        enrollment: json['enrollment_no'],
-        studentGR:json['gr_no'],
-        studentName: json['student_name'],
-        classname: json['classname'],
-        classBatch: json['class_batch'],
-        status: json['status']
+        studentID: json['studentId']as int?,
+        enrollment: json['enrollment_no'] as String?,
+        studentGR:json['gr_no']as String?,
+        studentName: json['student_name']as String?,
+        classname: json['classname']as String?,
+        classBatch: json['class_batch']as String?,
+        status: json['status']as String?
     );
   }
 

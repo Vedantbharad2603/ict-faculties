@@ -35,7 +35,7 @@ class AttendanceCard extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: whitebg,
+            color: backgroundColor,
             border: Border.all(color: muColor, width: 1.5),
             borderRadius: BorderRadius.circular(10),
           ),
@@ -130,7 +130,7 @@ class AttendanceCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
             decoration: BoxDecoration(
-              color: whitebg,
+              color: backgroundColor,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: muColor, width: 1),
             ),

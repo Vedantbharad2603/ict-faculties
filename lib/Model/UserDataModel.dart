@@ -32,19 +32,19 @@ class UserData {
   // Factory method to create a User instance from a JSON map
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      email: json['email'],
-      phoneNo: json['phone_no'],
+      email: json['email']?.toString(),
+      phoneNo: json['phone_no']?.toString(),
       id: json['id'],
-      userLoginId: json['user_login_id'],
-      facultyId: json['faculty_id'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
+      userLoginId: json['user_login_id']?.toString(),
+      facultyId: json['faculty_id']?.toString(),
+      firstName: json['first_name']?.toString(),
+      lastName: json['last_name']?.toString(),
       addressInfoId: json['address_info_id'],
-      gender: json['gender'],
-      profilePic: json['profile_pic'],
-      birthDate: DateTime.parse(json['birth_date']),
-      designation: json['designation'],
-      joiningDate: DateTime.parse(json['joining_date']),
+      gender: json['gender']?.toString(),
+      profilePic: json['profile_pic']?.toString(),
+      birthDate: DateTime.tryParse(json['birth_date']!=null?json['birth_date'].toString():''),
+      designation: json['designation']?.toString(),
+      joiningDate: DateTime.tryParse(json['joining_date']!=null?json['joining_date'].toString():''),
     );
   }
 

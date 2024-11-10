@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _passwordFocusNode = FocusNode();
 
   TextEditingController username = TextEditingController(text: "1327");
-  TextEditingController password = TextEditingController(text: "ChandrasinhParmar");
+  TextEditingController password = TextEditingController(text: "Chandrasinh@1327");
 
   LoginController loginControl = Get.put(LoginController());
   @override

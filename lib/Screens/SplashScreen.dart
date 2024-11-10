@@ -3,37 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ict_faculties/Helper/Components.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../API/API.dart';
-import '../Controller/LoginController.dart';
-import '../Helper/Colors.dart';
-
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  final box = GetStorage(); // GetStorage instance
-
-
-  @override
-  void initState() {
-    super.initState();
-    _navigateAfterSplash();
-  }
-
-  _navigateAfterSplash() async {
-      await Future.delayed(Duration(seconds: 1));
-      bool isLoggedIn = box.read('loggedin') ?? false;
-      if (isLoggedIn) {
-        Get.offAllNamed("/dashboard");
-      } else {
-        Get.offAllNamed("/login");
-      }
-  }
-
+class SplashScreen extends StatelessWidget {
+   // GetStorage instance
   @override
   Widget build(BuildContext context) {
     return Scaffold(

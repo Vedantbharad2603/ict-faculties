@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ict_faculties/Controller/AttendanceController.dart';
 import 'package:ict_faculties/Screens/EngagedStudentScreen.dart';
-import 'package:intl/intl.dart';  // Import intl package for date formatting
 import 'package:ict_faculties/Helper/Components.dart';
+import 'package:ict_faculties/Screens/adaptive_loading_screen.dart';
+import 'package:intl/intl.dart';
 import '../API/API.dart';
 import '../Controller/StudentController.dart';
 import '../Helper/Colors.dart';
 import '../Helper/Style.dart';
+import '../Model/CCStudent.dart';
 
 class Addstudentengaged extends StatefulWidget {
   const Addstudentengaged({super.key});
@@ -20,15 +22,15 @@ class Addstudentengaged extends StatefulWidget {
 class _AddstudentengagedState extends State<Addstudentengaged> {
   late int facId;
   late String facDesignation;
-  bool isLoading = false;
-  List<dynamic>? studentsDataList;
+  bool isLoading = true;
+  List<CCStudent>? studentsDataList;  // Change the type to CCStudent
   final StudentController studentController = Get.put(StudentController());
   final AttendanceController attendanceController = Get.put(AttendanceController());
   TextEditingController searchController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
-  EngagedStudent obj = new EngagedStudent();
-  dynamic foundStudent;
+  EngagedStudentScreen obj = EngagedStudentScreen();
+  CCStudent? foundStudent;  // Change to CCStudent?
 
   @override
   void initState() {
@@ -42,9 +44,11 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
     setState(() {
       isLoading = true;
     });
-    List<dynamic>? fetchedStudentDataList =
+    List<CCStudent>? fetchedStudentDataList =
     await studentController.getStudentsByCC(facId);
     if (!mounted) return;
+
+    // Map the fetched data to CCStudent
     setState(() {
       studentsDataList = fetchedStudentDataList;
       isLoading = false;
@@ -56,16 +60,13 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
     if (studentsDataList != null && searchText.isNotEmpty) {
       foundStudent = studentsDataList?.firstWhere(
             (student) =>
-        student['enrollment_no'] == searchText ||
-            student['gr_no'] == searchText,
-        orElse: () => null,
+        student.enrollmentNo == searchText || student.grNo == searchText,
       );
     } else {
       foundStudent = null;
     }
     setState(() {});
   }
-
   Future<void> selectDate(BuildContext context, TextEditingController controller, {bool isEndDate = false}) async {
     DateTime initialDate = DateTime.now();
     DateTime firstDate = DateTime.now();
@@ -104,34 +105,37 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
       });
     }
   }
-
-  Future<void> upsertEngaged()
-  async {
-    if(await attendanceController.upsertEngagedStudent(foundStudent['id'], facId, "N/A", "oe", startDateController.text, endDateController.text)){
-      ArtSweetAlert.show(
-        context: context,
-        barrierDismissible: false,
-        artDialogArgs: ArtDialogArgs(
-          dialogPadding: EdgeInsets.only(top: 30),
-          type: ArtSweetAlertType.success,
-          sizeSuccessIcon: 70,
-          confirmButtonText: "", // Hides the confirm button
-          confirmButtonColor: Colors.white,
-          title: "Student engaged successful !",
-          dialogDecoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(25),
+  Future<void> upsertEngaged() async {
+    if (foundStudent != null && startDateController.text.isNotEmpty) {
+      if (await attendanceController.upsertEngagedStudent(
+          foundStudent?.id,
+          facId,
+          "N/A",
+          "oe",
+          startDateController.text,
+          endDateController.text.isEmpty?startDateController.text:endDateController.text
+      )) {
+        ArtSweetAlert.show(
+          context: context,
+          barrierDismissible: false,
+          artDialogArgs: ArtDialogArgs(
+            dialogPadding: EdgeInsets.only(top: 30),
+            type: ArtSweetAlertType.success,
+            sizeSuccessIcon: 70,
+            confirmButtonText: "",
+            confirmButtonColor: Colors.white,
+            title: "Student engaged successful!",
+            dialogDecoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
-        ),
-      );
-      Future.delayed(const Duration(milliseconds: 1500), () {
-        Get.back();
-        Get.toNamed("/engagedStudent",arguments: {'faculty_id': facId,'faculty_des':facDesignation});
-        /////////////// HERE CALL fetchEngagedStudentDetail
-      });
-    }
-    else
-      {
+        );
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          Get.back();
+          Get.toNamed("/engagedStudent", arguments: {'faculty_id': facId, 'faculty_des': facDesignation});
+        });
+      } else {
         ArtSweetAlert.show(
           context: context,
           barrierDismissible: false,
@@ -139,9 +143,9 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
             dialogPadding: EdgeInsets.only(top: 30),
             type: ArtSweetAlertType.danger,
             sizeSuccessIcon: 70,
-            confirmButtonText: "", // Hides the confirm button
+            confirmButtonText: "",
             confirmButtonColor: Colors.white,
-            title: "Fail to engaged student !",
+            title: "Failed to engage student!",
             dialogDecoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(25),
@@ -152,8 +156,8 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
           Get.back();
         });
       }
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -172,30 +176,30 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
-          if(foundStudent != null && startDateController.text!="" &&endDateController.text!="")
-            {
-              ArtSweetAlert.show(
-                context: context,
-                artDialogArgs:
-                ArtDialogArgs(
-                  type: ArtSweetAlertType.question,
-                  sizeSuccessIcon: 70,
-                  confirmButtonText: "CONFIRM", // Hides the confirm button
-                  confirmButtonColor: muColor,
-                  onConfirm: () async {
-                    upsertEngaged();
-                    Get.back();
-                  },
-                  text: "${foundStudent["first_name"]} ${foundStudent["last_name"]} \n is officially engaged at \n"
-                      "${startDateController.text==endDateController.text?startDateController.text:
-                  "${startDateController.text} \n to \n ${endDateController.text}"}",
-                  dialogDecoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
+          if(foundStudent != null && startDateController.text!="")
+          {
+            ArtSweetAlert.show(
+              context: context,
+              artDialogArgs:
+              ArtDialogArgs(
+                type: ArtSweetAlertType.question,
+                sizeSuccessIcon: 70,
+                confirmButtonText: "CONFIRM", // Hides the confirm button
+                confirmButtonColor: muColor,
+                onConfirm: () async {
+                  upsertEngaged();
+                  Get.back();
+                },
+                text: "${foundStudent?.firstName} ${foundStudent?.lastName} \n is officially engaged at \n"
+                    "${startDateController.text==endDateController.text||endDateController.text.isEmpty?startDateController.text:
+                "${startDateController.text} \n to \n ${endDateController.text}"}",
+                dialogDecoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
                 ),
-              );
-            }
+              ),
+            );
+          }
           else{
             ArtSweetAlert.show(
               context: context,
@@ -208,7 +212,7 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                 onConfirm: () async {
                   Get.back();
                 },
-                title: "Missing Required Field",
+                title: "Required Field Missing",
                 dialogDecoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -230,7 +234,8 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 15.0),
-        child: Column(
+        child: isLoading?AdaptiveLoadingScreen():
+        Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
@@ -294,9 +299,7 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
               ],
             ),
             // Student Details
-            if (isLoading)
-              Center(child: CircularProgressIndicator(color: muColor,))
-            else if (foundStudent != null)
+            if (foundStudent != null)
               Column(
                 children: [
                   Divider(indent: 15,endIndent: 15,),
@@ -335,7 +338,7 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                                     color: Colors.grey,
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(500))),
-                                child: Image.network(studentImageAPI(foundStudent['gr_no'])),
+                                child: Image.network(studentImageAPI(foundStudent?.grNo)),
                               ),
                             ),
                             SizedBox(width: getWidth(context, 0.05),),
@@ -345,15 +348,15 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("${foundStudent['first_name']} ${foundStudent['last_name']}",
+                                  Text("${foundStudent?.firstName} ${foundStudent?.lastName}",
                                     style: TextStyle(fontFamily: 'mu_bold',fontSize:getSize(context, 2.5)),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Text("Enroll: ${foundStudent['enrollment_no']}",
+                                  Text("Enroll: ${foundStudent?.enrollmentNo}",
                                     style: TextStyle(fontFamily: 'mu_reg',fontSize:getSize(context, 2)),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Text("GR: ${foundStudent['gr_no']}",
+                                  Text("GR: ${foundStudent?.grNo}",
                                     style: TextStyle(fontFamily: 'mu_reg',fontSize:getSize(context, 2)),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -424,10 +427,10 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                       ),
                     ),
                     style: TextStyle(
-                      fontSize:getSize(context,2.5),
-                      fontFamily: "mu_reg",
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black
+                        fontSize:getSize(context,2.5),
+                        fontFamily: "mu_reg",
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black
                     ),
                     readOnly: true,
                   ),
@@ -476,9 +479,9 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                       ),
                     ),
                     style: TextStyle(
-                      fontSize:getSize(context,2.5),
-                      fontFamily: "mu_reg",
-                      fontWeight: FontWeight.w500,
+                        fontSize:getSize(context,2.5),
+                        fontFamily: "mu_reg",
+                        fontWeight: FontWeight.w500,
                         color: Colors.black
                     ),
                     readOnly: true,
@@ -493,4 +496,5 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
     );
   }
 }
+
 

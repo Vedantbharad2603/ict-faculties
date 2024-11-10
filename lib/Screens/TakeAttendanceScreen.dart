@@ -98,7 +98,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: fetchSchedule,
-        color: whitebg,
+        color: backgroundColor,
         backgroundColor: muColor,
         child: Column(
           children: [

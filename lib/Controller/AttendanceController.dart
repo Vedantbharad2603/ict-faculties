@@ -110,7 +110,7 @@ class AttendanceController extends GetxController {
     }
   }
 
-  Future<bool> upsertEngagedStudent(int studentId,int facultyId,String reason,String type,String startDate,String endDate) async {
+  Future<bool> upsertEngagedStudent(int? studentId,int? facultyId,String? reason,String? type,String? startDate,String? endDate) async {
     print('$studentId --- $facultyId --- $reason --- $type --- $startDate --- $endDate');
     try {
       Map<String, dynamic> body = {

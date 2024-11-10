@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:ict_faculties/Model/CCStudent.dart';
+import 'package:ict_faculties/Model/EngagedStudent.dart';
 import '../API/API.dart';
 
 class StudentController extends GetxController {
-  Future<List<dynamic>?> getStudentsByCC(int fid) async {
+  Future<List<CCStudent>?> getStudentsByCC(int fid) async {
     try {
       Map<String, dynamic> body = {
-        'f_id':fid,
+        'f_id': fid,
       };
 
       final response = await http.post(
@@ -15,13 +17,18 @@ class StudentController extends GetxController {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(body),
       );
+
       print(response.body);
       if (response.statusCode == 200) {
-        final List<dynamic> responseData = json.decode(response.body);
+        // Decode response body as List<dynamic>
+        List<dynamic> responseData = json.decode(response.body);
 
-        List<dynamic> StudentDataList = responseData.toList();
-        print(StudentDataList);
-        return StudentDataList;
+        // Map to List<EngagedStudent> using fromJson
+        List<CCStudent> studentDataList = responseData
+            .map((json) => CCStudent.fromJson(json))
+            .toList();
+        print(studentDataList);
+        return studentDataList;
       } else {
         return null;
       }
@@ -30,10 +37,11 @@ class StudentController extends GetxController {
       return null;
     }
   }
-  Future<List<dynamic>?> getEngageStudentsByCC(int fid) async {
+
+  Future<List<EngagedStudent>?> getEngageStudentsByCC(int fid) async {
     try {
       Map<String, dynamic> body = {
-        'f_id':fid,
+        'f_id': fid,
       };
 
       final response = await http.post(
@@ -41,13 +49,18 @@ class StudentController extends GetxController {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(body),
       );
+
       print(response.body);
       if (response.statusCode == 200) {
-        final List<dynamic> responseData = json.decode(response.body);
+        // Decode response body as List<dynamic>
+        List<dynamic> responseData = json.decode(response.body);
 
-        List<dynamic> EngagedStudentDataList = responseData.toList();
-        print(EngagedStudentDataList);
-        return EngagedStudentDataList;
+        // Map to List<EngagedStudent> using fromJson
+        List<EngagedStudent> engagedStudentDataList = responseData
+            .map((json) => EngagedStudent.fromJson(json))
+            .toList();
+        print(engagedStudentDataList);
+        return engagedStudentDataList;
       } else {
         return null;
       }

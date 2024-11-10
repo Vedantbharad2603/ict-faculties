@@ -10,6 +10,7 @@ class LoginController extends GetxController {
   final box = GetStorage();
 
   Future<bool> login(String username, String password) async {
+
     try {
       print("USERNAME = $username AND PASSWORD = $password");
       Map<String, String> body = {

@@ -24,8 +24,8 @@ class MarkAttendance extends StatefulWidget {
 class _MarkAttendanceState extends State<MarkAttendance> {
   final AttendanceController attendanceController =
       Get.put(AttendanceController());
-  List<dynamic>? attendanceDataList;
-  List<dynamic>? attendanceDataCopyList;
+  List<AttendanceList>? attendanceDataList;
+  List<AttendanceList>? attendanceDataCopyList;
   bool isLoading = false;
   bool isUploading = false;
   bool isSelectAll = true;
@@ -35,7 +35,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
 
   @override
   void initState() {
-    super.initState(); // Debugging line
+    super.initState();
     setState(() {
       scheduleData = Get.arguments['lec_data'];
       selectedDate = Get.arguments['selected_date'];
@@ -49,7 +49,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
       isLoading = true;
     });
     String formatedSelectedDate = DateFormat("yyyy-MM-dd").format(selectedDate);
-    List<dynamic>? fetchedAttendanceDataList =
+    List<AttendanceList>? fetchedAttendanceDataList =
     await attendanceController.getAttendanceList(
         scheduleData!.subjectID,
         scheduleData!.classID,
@@ -67,27 +67,13 @@ class _MarkAttendanceState extends State<MarkAttendance> {
     setState(() {
       // Create a copy of the attendance list and update status for 'na' to 'pr'
       attendanceDataCopyList = attendanceDataList?.map((attendance) {
-        if (attendance is AttendanceList) {
-          AttendanceList copiedAttendance = attendance.copyWith(
-            newStatus: attendance.status == 'na' ? 'pr' : attendance.status,
-          );
-          return copiedAttendance;
-        } else {
-          return Map<String, dynamic>.from(attendance);
-        }
+        // Ensure the item is of type AttendanceList
+        AttendanceList copiedAttendance = attendance.copyWith(
+          newStatus: attendance.status == 'na' ? 'pr' : attendance.status,
+        );
+        return copiedAttendance;
       }).toList();
     });
-
-    // Debugging: print the original attendance data
-    // print("Original Attendance Data:");
-    // attendanceDataList?.forEach((attendance) {
-    //   print(attendance);
-    // });
-    //
-    // print("Copied Attendance Data (with 'na' status changed to 'pr'):");
-    // attendanceDataCopyList?.forEach((attendance) {
-    //   print(attendance);
-    // });
   }
 
 
@@ -319,7 +305,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
           },
         ),
       ),
-      body: RefreshIndicator(
+      body: RefreshIndicator.adaptive(
         onRefresh: fetchAttendanceList,
         backgroundColor: muColor,
         color: Colors.white,
@@ -582,7 +568,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
                       },
                     )
                         : const Center(
-                        child: Text('No attendance data available')),
+                        child: Text('No students available')),
                   ),
                   // Save button
                   Align(

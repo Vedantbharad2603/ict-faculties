@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:ict_faculties/Binding/splash_binding.dart';
 import 'package:ict_faculties/Screens/AddStudentEngaged.dart';
 import 'package:ict_faculties/Screens/EngagedStudentScreen.dart';
 import 'package:ict_faculties/Screens/MarkAttendance.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: "/splashscreen",
             transition: Transition.fadeIn,
+            binding: SplashBinding(),
             page: () => SplashScreen()),
         GetPage(
             name: "/login",
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: "/engagedStudent",
             transition: Transition.fadeIn,
-            page: () => const EngagedStudent()),
+            page: () => const EngagedStudentScreen()),
         GetPage(
             name: "/addEngagedStudent",
             transition: Transition.fadeIn,
