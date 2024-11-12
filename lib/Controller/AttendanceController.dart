@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:ict_faculties/Model/AttendanceListModel.dart';
 import 'package:ict_faculties/Model/ScheduleModel.dart';
 import '../API/API.dart';
+import '../Model/MarkAttendanceModel.dart';
 
 class AttendanceController extends GetxController {
   Future<List<Schedule>?> getSchedule(int sid, String date) async {
@@ -49,7 +50,6 @@ class AttendanceController extends GetxController {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(body),
       );
-      print(response.body);
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
 
@@ -67,7 +67,7 @@ class AttendanceController extends GetxController {
     }
   }
 
-  Future<bool> uploadAttendance(List<Map<String, dynamic>> attendanceData) async {
+  Future<bool> uploadAttendance(List<MarkAttendanceData> attendanceData) async {
     try {
       // Ensure the attendance data is not empty
       if (attendanceData.isEmpty) {
@@ -75,21 +75,10 @@ class AttendanceController extends GetxController {
         return false;
       }
 
-      // Prepare the request body with all attendance data
-      List<Map<String, dynamic>> body = attendanceData.map((attendance) {
-        return {
-          "student_info_id": attendance['student_id'],
-          "subject_info_id": attendance['subject_id'],
-          "faculty_info_id": attendance['faculty_id'],
-          "date": attendance['date'],
-          "status": attendance['status'],
-          "class_start_time": attendance['class_start_time'],
-          "class_end_time": attendance['class_end_time'],
-          "lec_type":attendance['lec_type']
-        };
-      }).toList();
+      // Convert each attendance record to JSON using the model's toJson method
+      List<Map<String, dynamic>> body = attendanceData.map((data) => data.toJson()).toList();
 
-      print("Sending data: ");
+      print("----------------------------------------------\n Sending data: ");
       print(json.encode(body));
 
       final response = await http.post(
@@ -97,11 +86,13 @@ class AttendanceController extends GetxController {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(body),
       );
+      print(uploadAttendanceAPI);
       if (response.statusCode == 200) {
         print('Attendance uploaded successfully');
         return true;
       } else {
         print('Failed to upload attendance. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
         return false;
       }
     } catch (e) {

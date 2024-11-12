@@ -1,4 +1,4 @@
-String Host = "https://316c-2409-40c1-3009-d76e-485a-f5e2-d55b-eeea.ngrok-free.app";
+String Host = "https://2a35-119-160-199-91.ngrok-free.app";
 String Path = "/ict-server/api.php";
 
 String CurrentVersion = "1.0";

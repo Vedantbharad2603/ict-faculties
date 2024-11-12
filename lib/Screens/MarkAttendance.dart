@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import '../Controller/AttendanceController.dart';
 import '../Helper/Colors.dart';
 import '../Helper/Style.dart';
+import '../Model/MarkAttendanceModel.dart';
 import '../Model/ScheduleModel.dart';
 
 class MarkAttendance extends StatefulWidget {
@@ -26,6 +27,8 @@ class _MarkAttendanceState extends State<MarkAttendance> {
       Get.put(AttendanceController());
   List<AttendanceList>? attendanceDataList;
   List<AttendanceList>? attendanceDataCopyList;
+  List<MarkAttendanceData> uploadAttendanceDataList =[];
+
   bool isLoading = false;
   bool isUploading = false;
   bool isSelectAll = true;
@@ -59,6 +62,13 @@ class _MarkAttendanceState extends State<MarkAttendance> {
     if (!mounted) return;
     setState(() {
       attendanceDataList = fetchedAttendanceDataList;
+
+
+      print("------------------------------------------------\n AttendanceDataList = ");
+      for (var item in attendanceDataList!) {
+        print(item.toString());
+      }
+
       createAttendanceCopy();
       isLoading = false;
     });
@@ -74,6 +84,10 @@ class _MarkAttendanceState extends State<MarkAttendance> {
         return copiedAttendance;
       }).toList();
     });
+    print("------------------------------------------------\n CopyiedAttendanceDataList = ");
+    for (var item in attendanceDataCopyList!) {
+      print(item.toString());
+    }
   }
 
 
@@ -82,76 +96,88 @@ class _MarkAttendanceState extends State<MarkAttendance> {
       isUploading = true;
     });
 
-    // Find items where the 'status' in attendanceDataList and attendanceDataCopyList are different
-    List<Map<String, dynamic>> attendanceData = [];
-
+    // Loop through each student and add only modified records to the list
     for (int i = 0; i < attendanceDataCopyList!.length; i++) {
-      // Check if the status is different in both lists
+      // Check if the status in attendanceDataCopyList is different from attendanceDataList
       if (attendanceDataList![i].status != attendanceDataCopyList![i].status) {
-        attendanceData.add({
-          'subject_id': scheduleData!.subjectID,
-          'faculty_id': facultyId,
-          'student_id': attendanceDataCopyList![i].studentID,
-          'date': DateFormat("yyyy-MM-dd").format(selectedDate),
-          'status': attendanceDataCopyList![i].status, // The status from the original list
-          'class_start_time': scheduleData!.startTime,
-          'class_end_time': scheduleData!.endTime,
-          'lec_type':scheduleData!.lecType
-        });
+        uploadAttendanceDataList.add(MarkAttendanceData(
+          subjectId: scheduleData!.subjectID,
+          facultyId: facultyId,
+          studentId: attendanceDataCopyList![i].studentID,
+          date: DateFormat("yyyy-MM-dd").format(selectedDate),
+          status: attendanceDataCopyList![i].status,
+          classStartTime: scheduleData!.startTime,
+          classEndTime: scheduleData!.endTime,
+          lecType: scheduleData!.lecType,
+        ));
       }
     }
 
-    // Upload only the attendance data where the status is different
-    bool success = await attendanceController.uploadAttendance(attendanceData);
+    // Print to verify the data being uploaded
+    print("------------------------------------------------\n Upload Time = ");
+    for (var item in uploadAttendanceDataList) {
+      print(item.toString());
+    }
 
-    // Show success or error alert based on the result
-    if (success) {
-      ArtSweetAlert.show(
-        context: context,
-        barrierDismissible: false,
-        artDialogArgs: ArtDialogArgs(
-          dialogPadding: EdgeInsets.only(top: 30),
-          type: ArtSweetAlertType.success,
-          sizeSuccessIcon: 70,
-          confirmButtonText: "", // Hides the confirm button
-          confirmButtonColor: Colors.white,
-          title: "Attendance Uploaded!",
-          dialogDecoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(25),
+    // Check if there is any data to upload
+    if (uploadAttendanceDataList.isNotEmpty) {
+      bool success = await attendanceController.uploadAttendance(uploadAttendanceDataList);
+
+      // Show success or error alert based on the result
+      if (success) {
+        ArtSweetAlert.show(
+          context: context,
+          barrierDismissible: false,
+          artDialogArgs: ArtDialogArgs(
+            dialogPadding: EdgeInsets.only(top: 30),
+            type: ArtSweetAlertType.success,
+            sizeSuccessIcon: 70,
+            confirmButtonText: "",
+            confirmButtonColor: Colors.white,
+            title: "Attendance Uploaded!",
+            dialogDecoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
-        ),
-      );
-      Future.delayed(const Duration(milliseconds: 1500), () {
-        Get.back();
-        Get.back();
-      });
+        );
+        Future.delayed(const Duration(seconds: 2), () {
+          Get.back();
+          Get.back();
+        });
+      } else {
+        // Handle failure
+        ArtSweetAlert.show(
+          context: context,
+          barrierDismissible: false,
+          artDialogArgs: ArtDialogArgs(
+            dialogPadding: EdgeInsets.only(top: 30),
+            type: ArtSweetAlertType.danger,
+            sizeSuccessIcon: 70,
+            confirmButtonText: "",
+            confirmButtonColor: Colors.white,
+            title: "Error uploading attendance!",
+            dialogDecoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+            ),
+          ),
+        );
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          Get.back();
+        });
+      }
     } else {
-      ArtSweetAlert.show(
-        context: context,
-        barrierDismissible: false,
-        artDialogArgs: ArtDialogArgs(
-          dialogPadding: EdgeInsets.only(top: 30),
-          type: ArtSweetAlertType.danger,
-          sizeSuccessIcon: 70,
-          confirmButtonText: "", // Hides the confirm button
-          confirmButtonColor: Colors.white,
-          title: "Error to upload!",
-          dialogDecoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-      );
-      Future.delayed(const Duration(milliseconds: 1500), () {
-        Get.back();
-      });
+      // No data to upload, show a message if needed
+      print("No modified records to upload.");
     }
 
     setState(() {
       isUploading = false;
     });
   }
+
+
 
   void showStudentDetails(AttendanceList attendanceList) {
     Get.defaultDialog(
