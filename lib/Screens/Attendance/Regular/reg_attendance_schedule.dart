@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:ict_faculties/Animation/zoom_in_animation.dart';
+import 'package:ict_faculties/Animations/zoom_in_animation.dart';
 import 'package:ict_faculties/Controllers/attendance_controller.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Models/reg_attendance_schedule.dart';
