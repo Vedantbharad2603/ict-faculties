@@ -1,16 +1,16 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ict_faculties/Controller/AttendanceController.dart';
-import 'package:ict_faculties/Screens/EngagedStudentScreen.dart';
+import 'package:ict_faculties/Controllers/attendance_controller.dart';
+import 'package:ict_faculties/Controllers/student_controller.dart';
 import 'package:ict_faculties/Helper/Components.dart';
-import 'package:ict_faculties/Screens/adaptive_loading_screen.dart';
+import 'package:ict_faculties/Models/student.dart';
+import 'package:ict_faculties/Network/API.dart';
+import 'package:ict_faculties/Screens/StudentEngage/engage_students_list.dart';
 import 'package:intl/intl.dart';
-import '../API/API.dart';
-import '../Controller/StudentController.dart';
-import '../Helper/Colors.dart';
-import '../Helper/Style.dart';
-import '../Model/CCStudent.dart';
+import '../../Helper/Colors.dart';
+import '../../Helper/Style.dart';
+import '../Loading/adaptive_loading_screen.dart';
 
 class Addstudentengaged extends StatefulWidget {
   const Addstudentengaged({super.key});
@@ -23,14 +23,14 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
   late int facId;
   late String facDesignation;
   bool isLoading = true;
-  List<CCStudent>? studentsDataList;  // Change the type to CCStudent
+  List<Student>? studentsDataList;  // Change the type to CCStudent
   final StudentController studentController = Get.put(StudentController());
   final AttendanceController attendanceController = Get.put(AttendanceController());
   TextEditingController searchController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
   EngagedStudentScreen obj = EngagedStudentScreen();
-  CCStudent? foundStudent;  // Change to CCStudent?
+  Student? foundStudent;  // Change to CCStudent?
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
     setState(() {
       isLoading = true;
     });
-    List<CCStudent>? fetchedStudentDataList =
+    List<Student>? fetchedStudentDataList =
     await studentController.getStudentsByCC(facId);
     if (!mounted) return;
 

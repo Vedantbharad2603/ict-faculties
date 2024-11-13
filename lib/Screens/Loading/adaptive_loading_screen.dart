@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Helper/Colors.dart';
+import '../../Helper/Colors.dart';
 
 class AdaptiveLoadingScreen extends StatelessWidget {
   const AdaptiveLoadingScreen({super.key});

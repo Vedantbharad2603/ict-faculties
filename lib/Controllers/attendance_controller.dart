@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:ict_faculties/Model/AttendanceListModel.dart';
-import 'package:ict_faculties/Model/ScheduleModel.dart';
-import '../API/API.dart';
-import '../Model/MarkAttendanceModel.dart';
+import 'package:ict_faculties/Models/extra_attendance_schedule.dart';
+import 'package:ict_faculties/Models/reg_attendance_list.dart';
+import 'package:ict_faculties/Models/reg_attendance_schedule.dart';
+import 'package:ict_faculties/Models/reg_mark_attendance.dart';
+import 'package:ict_faculties/Network/API.dart';
 
 class AttendanceController extends GetxController {
-  Future<List<Schedule>?> getSchedule(int sid, String date) async {
+  Future<List<RegSchedule>?> getSchedule(int fid, String date) async {
     try {
-      Map<String, dynamic> body = {'f_id': sid, 'date': date};
+      Map<String, dynamic> body = {'f_id': fid, 'date': date};
 
       final response = await http.post(
         Uri.parse(getScheduleAPI),
@@ -20,8 +21,8 @@ class AttendanceController extends GetxController {
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
 
-        List<Schedule> scheduleDataList = responseData
-            .map((scheduleData) => Schedule.fromJson(scheduleData))
+        List<RegSchedule> scheduleDataList = responseData
+            .map((scheduleData) => RegSchedule.fromJson(scheduleData))
             .toList();
 
         return scheduleDataList;
@@ -33,8 +34,34 @@ class AttendanceController extends GetxController {
       return null;
     }
   }
+  Future<List<ExtraSchedule>?> getExtraSchedule(int fid) async {
+    try {
+      Map<String, dynamic> body = {'f_id': fid};
 
-  Future<List<AttendanceList>?> getAttendanceList(
+      final response = await http.post(
+        Uri.parse(getExtraScheduleAPI),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = json.decode(response.body);
+
+        List<ExtraSchedule> extraScheduleDataList = responseData
+            .map((scheduleData) => ExtraSchedule.fromJson(scheduleData))
+            .toList();
+
+        return extraScheduleDataList;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
+  Future<List<RegAttendanceList>?> getAttendanceList(
       int sub_id, int cid, int fid,String cdate, String stime) async {
     try {
       Map<String, dynamic> body = {
@@ -53,8 +80,8 @@ class AttendanceController extends GetxController {
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
 
-        List<AttendanceList> AttendanceDataList = responseData
-            .map((attendanceData) => AttendanceList.fromJson(attendanceData))
+        List<RegAttendanceList> AttendanceDataList = responseData
+            .map((attendanceData) => RegAttendanceList.fromJson(attendanceData))
             .toList();
 
         return AttendanceDataList;
@@ -67,7 +94,7 @@ class AttendanceController extends GetxController {
     }
   }
 
-  Future<bool> uploadAttendance(List<MarkAttendanceData> attendanceData) async {
+  Future<bool> uploadAttendance(List<RegMarkAttendanceData> attendanceData) async {
     try {
       // Ensure the attendance data is not empty
       if (attendanceData.isEmpty) {

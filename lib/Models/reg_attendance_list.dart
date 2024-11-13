@@ -1,4 +1,4 @@
-class AttendanceList {
+class RegAttendanceList {
   int? studentID;
   String? enrollment;
   String? studentName;
@@ -7,7 +7,7 @@ class AttendanceList {
   String? classBatch;
   String? status;
 
-  AttendanceList({
+  RegAttendanceList({
     required this.studentID,
     required this.enrollment,
     required this.studentName,
@@ -20,8 +20,8 @@ class AttendanceList {
   String toString() {
     return 'Enroll: $enrollment, GR: $studentGR, Name: $studentName, Class: $classname, Batch: $classBatch, Status: $status';
   }
-  factory AttendanceList.fromJson(Map<String, dynamic> json) {
-    return AttendanceList(
+  factory RegAttendanceList.fromJson(Map<String, dynamic> json) {
+    return RegAttendanceList(
         studentID: json['studentId']as int?,
         enrollment: json['enrollment_no'] as String?,
         studentGR:json['gr_no']as String?,
@@ -45,8 +45,8 @@ class AttendanceList {
     };
   }
 
-  AttendanceList copyWith({String? newStatus}) {
-    return AttendanceList(
+  RegAttendanceList copyWith({String? newStatus}) {
+    return RegAttendanceList(
       studentID: this.studentID,
       enrollment: this.enrollment,
       studentGR: this.studentGR,

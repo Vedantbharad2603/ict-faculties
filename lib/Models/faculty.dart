@@ -1,4 +1,4 @@
-class UserData {
+class Faculty {
   String? email;
   String? phoneNo;
   int? id;
@@ -13,7 +13,7 @@ class UserData {
   String? designation;
   DateTime? joiningDate;
 
-  UserData({
+  Faculty({
     this.email,
     this.phoneNo,
     this.id,
@@ -30,8 +30,8 @@ class UserData {
   });
 
   // Factory method to create a User instance from a JSON map
-  factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
+  factory Faculty.fromJson(Map<String, dynamic> json) {
+    return Faculty(
       email: json['email']?.toString(),
       phoneNo: json['phone_no']?.toString(),
       id: json['id'],

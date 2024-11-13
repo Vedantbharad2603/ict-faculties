@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:ict_faculties/Model/CCStudent.dart';
-import 'package:ict_faculties/Model/EngagedStudent.dart';
-import '../API/API.dart';
+import 'package:ict_faculties/Models/engage_student.dart';
+import 'package:ict_faculties/Models/student.dart';
+import 'package:ict_faculties/Network/API.dart';
 
 class StudentController extends GetxController {
-  Future<List<CCStudent>?> getStudentsByCC(int fid) async {
+  Future<List<Student>?> getStudentsByCC(int fid) async {
     try {
       Map<String, dynamic> body = {
         'f_id': fid,
@@ -24,8 +24,8 @@ class StudentController extends GetxController {
         List<dynamic> responseData = json.decode(response.body);
 
         // Map to List<EngagedStudent> using fromJson
-        List<CCStudent> studentDataList = responseData
-            .map((json) => CCStudent.fromJson(json))
+        List<Student> studentDataList = responseData
+            .map((json) => Student.fromJson(json))
             .toList();
         print(studentDataList);
         return studentDataList;

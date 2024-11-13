@@ -1,4 +1,4 @@
-class Schedule {
+class RegSchedule {
   int subjectID;
   String subjectName;
   String shortName;
@@ -14,7 +14,7 @@ class Schedule {
   String startTime;
   String endTime;
 
-  Schedule({
+  RegSchedule({
     required this.subjectID,
     required this.subjectName,
     required this.sem,
@@ -31,8 +31,8 @@ class Schedule {
     required this.endTime,
   });
 
-  factory Schedule.fromJson(Map<String, dynamic> json) {
-    return Schedule(
+  factory RegSchedule.fromJson(Map<String, dynamic> json) {
+    return RegSchedule(
       subjectID: json['subjectID'] ?? 0,
       subjectName: json['subject_name'] ?? '',
       sem: json['sem'] ?? 0,

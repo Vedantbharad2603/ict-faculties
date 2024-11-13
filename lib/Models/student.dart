@@ -1,4 +1,4 @@
-class CCStudent {
+class Student {
   int? id;
   String? enrollmentNo;
   String? grNo;
@@ -18,7 +18,7 @@ class CCStudent {
   int? sem;
   String? eduType;
 
-  CCStudent({
+  Student({
     this.id,
     this.enrollmentNo,
     this.grNo,
@@ -39,8 +39,8 @@ class CCStudent {
     this.eduType,
   });
 
-  factory CCStudent.fromJson(Map<String, dynamic> json) {
-    return CCStudent(
+  factory Student.fromJson(Map<String, dynamic> json) {
+    return Student(
       id: json['id'] as int?,
       enrollmentNo: json['enrollment_no'] as String?,
       grNo: json['gr_no'] as String?,

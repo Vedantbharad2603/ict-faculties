@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:ict_faculties/Binding/splash_binding.dart';
-import 'package:ict_faculties/Screens/AddStudentEngaged.dart';
-import 'package:ict_faculties/Screens/EngagedStudentScreen.dart';
-import 'package:ict_faculties/Screens/MarkAttendance.dart';
-import 'package:ict_faculties/Screens/PlacementScreen.dart';
-import 'package:ict_faculties/Screens/TakeAttendanceScreen.dart';
-
-import 'Screens/DashboardScreen.dart';
-import 'Screens/ForgotPasswordScreen.dart';
-import 'Screens/LoginScreen.dart';
-import 'Screens/SplashScreen.dart';
+import 'package:ict_faculties/Screens/Attendance/Extra/extra_mark_attendance.dart';
+import 'package:ict_faculties/Screens/StudentEngage/add_engage_student.dart';
+import 'package:ict_faculties/Screens/Attendance/Extra/extra_attendance_schedule.dart';
+import 'package:ict_faculties/Screens/StudentEngage/engage_students_list.dart';
+import 'Screens/Attendance/Regular/reg_mark_attendance.dart';
+import 'Screens/Attendance/Regular/reg_attendance_schedule.dart';
+import 'Screens/Home/home_dashboard.dart';
+import 'Screens/Authentication/forgot_password.dart';
+import 'Screens/Authentication/login.dart';
+import 'Screens/Splash/main_splash.dart';
 
 void main() {
   runApp(MyApp());
@@ -55,9 +55,17 @@ class MyApp extends StatelessWidget {
             transition: Transition.fadeIn,
             page: () => const TakeAttendanceScreen()),
         GetPage(
-            name: "/markattendance",
+            name: "/markAttendance",
             transition: Transition.fadeIn,
             page: () => const MarkAttendance()),
+        GetPage(
+            name: "/takeExtraAttendance",
+            transition: Transition.fadeIn,
+            page: () => const ExtraAttendanceSchedule()),
+        GetPage(
+            name: "/markExtraAttendance",
+            transition: Transition.fadeIn,
+            page: () => const MarkExtraAttendance()),
       ],
       initialRoute: "/splashscreen",
     );

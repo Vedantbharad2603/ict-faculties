@@ -4,12 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ict_faculties/Controllers/login_controller.dart';
 import 'package:ict_faculties/Helper/Components.dart';
+import 'package:ict_faculties/Models/faculty.dart';
+import 'package:ict_faculties/Network/API.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../API/API.dart';
-import '../Controller/LoginController.dart';
-import '../Helper/Colors.dart';
-import '../Model/UserDataModel.dart';
+import '../../Helper/Colors.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,7 +20,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final box = GetStorage();
-  late UserData userData;
+  late Faculty userData;
   LoginController loginControl = Get.put(LoginController());
 
   @override
@@ -30,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Map<String, dynamic> storedData = box.read('userdata');
     print("from dashboard");
     print(storedData);
-    userData = UserData.fromJson(storedData);
+    userData = Faculty.fromJson(storedData);
   }
 
   _getDesignation() {
@@ -146,8 +146,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   childAspectRatio: 0.9,
                   padding: EdgeInsets.all(10), // Padding for the GridView
                   children: [
-                    TapIcons(context, "Take Attendance", 2, "attendance.png", 45, "/takeAttendance", {'faculty_id': userData.id}),
+                    TapIcons(context, "Attendance", 2, "attendance.png", 45, "/takeAttendance", {'faculty_id': userData.id}),
                     TapIcons(context, "Student Engaged", 2, "attendance.png", 45, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    TapIcons(context, "Extra Attendance", 2, "attendance.png", 45, "/takeExtraAttendance", {'faculty_id': userData.id,'faculty_des':userData.designation}),
                   ],
                 ),
               ),

@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import '../API/API.dart';
-import '../Model/UserDataModel.dart';
-// import '../Model/UserDataModel.dart';
+import 'package:ict_faculties/Models/faculty.dart';
+import 'package:ict_faculties/Network/API.dart';
 
 class LoginController extends GetxController {
   final box = GetStorage();
@@ -29,7 +28,7 @@ class LoginController extends GetxController {
 
         if (responseData != null && responseData['faculties_details'] != null) {
           // Accessing the nested faculties_details
-          UserData userData = UserData.fromJson(responseData['faculties_details']);
+          Faculty userData = Faculty.fromJson(responseData['faculties_details']);
 
           // Writing data to storage
           box.write('userdata', userData.toJson());

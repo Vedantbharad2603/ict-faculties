@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:ict_faculties/Animation/zoom_in_animation.dart';
 import 'package:ict_faculties/Helper/Components.dart';
-import 'package:ict_faculties/Model/ScheduleModel.dart';
+import 'package:ict_faculties/Models/extra_attendance_schedule.dart';
+import 'package:ict_faculties/Screens/Loading/adaptive_loading_screen.dart';
+import 'package:ict_faculties/Widgets/Attendance/extra_attendance_card.dart';
 import 'package:intl/intl.dart';
 import 'package:ict_faculties/Helper/Colors.dart';
 import 'package:ict_faculties/Helper/Style.dart';
-import 'package:ict_faculties/Widgets/AttendanceCard.dart';
 
-import '../Controller/AttendanceController.dart';
+import '../../../Controllers/attendance_controller.dart';
 
-class TakeAttendanceScreen extends StatefulWidget {
-  const TakeAttendanceScreen({super.key});
+class ExtraAttendanceSchedule extends StatefulWidget {
+  const ExtraAttendanceSchedule({super.key});
 
   @override
-  State<TakeAttendanceScreen> createState() => _TakeAttendanceScreenState();
+  State<ExtraAttendanceSchedule> createState() => _ExtraAttendanceScheduleState();
 }
 
-class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
+class _ExtraAttendanceScheduleState extends State<ExtraAttendanceSchedule> {
   final AttendanceController attendanceController = Get.put(AttendanceController());
-  List<Schedule>? scheduleDataList;
+  List<ExtraSchedule>? scheduleDataList;
   DateTime selectedDate = DateTime.now();
   bool isLoading = false;
   late int facultyId;
@@ -34,12 +36,12 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
       isLoading=true;
     });
     facultyId = Get.arguments['faculty_id'];
-    String todayDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-    List<Schedule>? fetchedScheduleDataList = await attendanceController.getSchedule(facultyId,todayDate);
+    // String todayDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+    List<ExtraSchedule>? fetchedExtraScheduleDataList = await attendanceController.getExtraSchedule(facultyId);
     if (!mounted) return;
     setState(() {
-      if (fetchedScheduleDataList != null) {
-        scheduleDataList= fetchedScheduleDataList;
+      if (fetchedExtraScheduleDataList != null) {
+        scheduleDataList= fetchedExtraScheduleDataList;
         print(scheduleDataList);
       }
       isLoading = false;
@@ -86,7 +88,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
     return Scaffold(
       backgroundColor: muGrey,
       appBar: AppBar(
-        title: Text("Student Attendance", style: AppbarStyle),
+        title: Text("Extra Attendance Schedule", style: AppbarStyle),
         centerTitle: true,
         backgroundColor: muColor,
         leading: IconButton(
@@ -96,7 +98,8 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
           },
         ),
       ),
-      body: RefreshIndicator(
+      body:  isLoading ? AdaptiveLoadingScreen()
+          :RefreshIndicator.adaptive(
         onRefresh: fetchSchedule,
         color: backgroundColor,
         backgroundColor: muColor,
@@ -117,7 +120,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
                   padding: const EdgeInsets.only(right: 15.0),
                   child: IconButton(onPressed :()=>_selectDate(context),
                       icon: Icon(
-                          Icons.calendar_month,
+                        Icons.calendar_month,
                         color: muColor,
                         size: getSize(context, 3.5),
                       )),
@@ -128,45 +131,40 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Divider(),
             ),
-            isLoading ? Center(child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(color: muColor, strokeWidth: 3,),
-            ))
-                : scheduleDataList != null && scheduleDataList!.isNotEmpty
+            scheduleDataList != null && scheduleDataList!.isNotEmpty
                 ? Expanded(
-                  child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: scheduleDataList!.length,
-                              itemBuilder: (context, index) {
-                  Schedule schedule = scheduleDataList![index];
-                  return scheduleCard(
-                      context,
-                      facultyId,
-                      schedule.sem,
-                      schedule.eduType,
-                      schedule.subjectID,
-                      schedule.subjectName,
-                      schedule.shortName,
-                      schedule.subjectType,
-                      schedule.subjectCode,
-                      schedule.classID,
-                      schedule.className,
-                      schedule.batch,
-                      schedule.classLocation,
-                      schedule.lecType,
-                      schedule.startTime,
-                      schedule.endTime,
-                      selectedDate,
-                      schedule
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: scheduleDataList!.length,
+                itemBuilder: (context, index) {
+                  ExtraSchedule schedule = scheduleDataList![index];
+                  return ZoomInAnimation(
+                    delayMilliseconds: 100*index,
+                    child: ExtraScheduleCard(
+                      context: context,
+                      facultyId: facultyId,
+                      semId: schedule.semId,
+                      sem: schedule.sem,
+                      eduType: schedule.eduType,
+                      lecType: schedule.lecType,
+                      subjectId: schedule.subjectID,
+                      subjectName: schedule.subjectName,
+                      shortSubName: schedule.shortName,
+                      subType: schedule.subjectType,
+                      subCode: schedule.subjectCode,
+                      selectedDate: selectedDate,
+                      arg: schedule,
+                    ),
                   );
-                              },
-                            ),
-                ): Center(
-                child: Text(
-                  "No schedule",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
+
+                },
               ),
+            ): Center(
+              child: Text(
+                "No schedule",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ),
 
           ],
         ),

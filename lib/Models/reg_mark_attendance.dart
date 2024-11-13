@@ -1,4 +1,4 @@
-class MarkAttendanceData {
+class RegMarkAttendanceData {
   final int? subjectId;
   final int? facultyId;
   final int? studentId;
@@ -8,7 +8,7 @@ class MarkAttendanceData {
   final String? classEndTime;
   final String? lecType;
 
-  MarkAttendanceData({
+  RegMarkAttendanceData({
     required this.subjectId,
     required this.facultyId,
     required this.studentId,
@@ -19,7 +19,7 @@ class MarkAttendanceData {
     required this.lecType,
   });
 
-  // Method to convert instance to JSON format for API
+  // Method to convert instance to JSON format for Network
   Map<String, dynamic> toJson() {
     return {
       'subject_info_id': subjectId,

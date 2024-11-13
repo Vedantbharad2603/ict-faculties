@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ict_faculties/Controller/StudentController.dart';
-import 'package:ict_faculties/Screens/LoadingScreen.dart';
+import 'package:ict_faculties/Controllers/student_controller.dart';
+import 'package:ict_faculties/Helper/Colors.dart';
+import 'package:ict_faculties/Helper/Components.dart';
+import 'package:ict_faculties/Helper/Style.dart';
+import 'package:ict_faculties/Models/engage_student.dart';
+import 'package:ict_faculties/Screens/Loading/mu_loading_screen.dart';
 import 'package:intl/intl.dart'; // To format dates
-import '../Helper/Colors.dart';
-import '../Helper/Components.dart';
-import '../Helper/Style.dart';
-import '../Model/EngagedStudent.dart';
 
 class EngagedStudentScreen extends StatefulWidget {
   const EngagedStudentScreen({super.key});

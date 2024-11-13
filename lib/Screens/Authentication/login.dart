@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ict_faculties/Controllers/login_controller.dart';
 import 'package:ict_faculties/Helper/Colors.dart';
-
-import '../Controller/LoginController.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,8 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _enrollmentNumberFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
-  TextEditingController username = TextEditingController(text: "1327");
-  TextEditingController password = TextEditingController(text: "Chandrasinh@1327");
+  TextEditingController username = TextEditingController(text: "2023");
+  TextEditingController password = TextEditingController(text: "Rakesh@2023");
 
   LoginController loginControl = Get.put(LoginController());
   @override

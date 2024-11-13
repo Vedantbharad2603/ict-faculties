@@ -4,16 +4,16 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ict_faculties/API/API.dart';
 import 'package:ict_faculties/Helper/Components.dart';
-import 'package:ict_faculties/Model/AttendanceListModel.dart';
-import 'package:ict_faculties/Screens/LoadingScreen.dart';
+import 'package:ict_faculties/Models/reg_attendance_list.dart';
+import 'package:ict_faculties/Models/reg_attendance_schedule.dart';
+import 'package:ict_faculties/Models/reg_mark_attendance.dart';
+import 'package:ict_faculties/Network/API.dart';
+import 'package:ict_faculties/Screens/Loading/mu_loading_screen.dart';
 import 'package:intl/intl.dart';
-import '../Controller/AttendanceController.dart';
-import '../Helper/Colors.dart';
-import '../Helper/Style.dart';
-import '../Model/MarkAttendanceModel.dart';
-import '../Model/ScheduleModel.dart';
+import '../../../Controllers/attendance_controller.dart';
+import '../../../Helper/Colors.dart';
+import '../../../Helper/Style.dart';
 
 class MarkAttendance extends StatefulWidget {
   const MarkAttendance({super.key});
@@ -25,16 +25,16 @@ class MarkAttendance extends StatefulWidget {
 class _MarkAttendanceState extends State<MarkAttendance> {
   final AttendanceController attendanceController =
       Get.put(AttendanceController());
-  List<AttendanceList>? attendanceDataList;
-  List<AttendanceList>? attendanceDataCopyList;
-  List<MarkAttendanceData> uploadAttendanceDataList =[];
+  List<RegAttendanceList>? attendanceDataList;
+  List<RegAttendanceList>? attendanceDataCopyList;
+  List<RegMarkAttendanceData> uploadAttendanceDataList =[];
 
   bool isLoading = false;
   bool isUploading = false;
   bool isSelectAll = true;
   late DateTime selectedDate;
   late int facultyId;
-  Schedule? scheduleData;
+  RegSchedule? scheduleData;
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
       isLoading = true;
     });
     String formatedSelectedDate = DateFormat("yyyy-MM-dd").format(selectedDate);
-    List<AttendanceList>? fetchedAttendanceDataList =
+    List<RegAttendanceList>? fetchedAttendanceDataList =
     await attendanceController.getAttendanceList(
         scheduleData!.subjectID,
         scheduleData!.classID,
@@ -78,7 +78,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
       // Create a copy of the attendance list and update status for 'na' to 'pr'
       attendanceDataCopyList = attendanceDataList?.map((attendance) {
         // Ensure the item is of type AttendanceList
-        AttendanceList copiedAttendance = attendance.copyWith(
+        RegAttendanceList copiedAttendance = attendance.copyWith(
           newStatus: attendance.status == 'na' ? 'pr' : attendance.status,
         );
         return copiedAttendance;
@@ -100,7 +100,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
     for (int i = 0; i < attendanceDataCopyList!.length; i++) {
       // Check if the status in attendanceDataCopyList is different from attendanceDataList
       if (attendanceDataList![i].status != attendanceDataCopyList![i].status) {
-        uploadAttendanceDataList.add(MarkAttendanceData(
+        uploadAttendanceDataList.add(RegMarkAttendanceData(
           subjectId: scheduleData!.subjectID,
           facultyId: facultyId,
           studentId: attendanceDataCopyList![i].studentID,
@@ -179,7 +179,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
 
 
 
-  void showStudentDetails(AttendanceList attendanceList) {
+  void showStudentDetails(RegAttendanceList attendanceList) {
     Get.defaultDialog(
       title: "Student Details",
       titleStyle:
@@ -492,7 +492,7 @@ class _MarkAttendanceState extends State<MarkAttendance> {
                         3, // controls the size of each tile, adjust this for the desired look
                       ),
                       itemBuilder: (context, index) {
-                        AttendanceList attendanceList =
+                        RegAttendanceList attendanceList =
                         attendanceDataCopyList![index];
                         bool isDisabled = attendanceList.status == 'oe' ||
                             attendanceList.status == 'gl';
