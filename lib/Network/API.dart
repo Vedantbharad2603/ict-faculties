@@ -1,4 +1,4 @@
-String Host = "https://16e8-2409-40c1-3038-c1e6-bdbb-c5c8-393b-4e42.ngrok-free.app";
+String Host = "https://c546-2409-40c1-303a-fadd-e95e-ba7e-4a43-5bb3.ngrok-free.app";
 String Path = "/ict-server/api.php";
 
 String CurrentVersion = "1.0";
@@ -8,7 +8,9 @@ String validateVersionAPI = '$Host$Path/ValidateVersion';
 String getScheduleAPI = '$Host$Path/GetFacultySchedule';
 String getExtraScheduleAPI = '$Host$Path/GetExtraSchedule';
 String getAttendanceListAPI = '$Host$Path/GetAttendanceList';
+String getExtraAttendanceListAPI = '$Host$Path/GetExtraAttendanceList';
 String uploadAttendanceAPI = '$Host$Path/UploadAttendance';
+String uploadExtraAttendanceAPI = '$Host$Path/UploadExtraAttendance';
 String getStudentByCCAPI = '$Host$Path/GetStudentsByCC';
 String getEngagedStudentByCCAPI = '$Host$Path/GetEngagedStudentsByCC';
 String upsertEngagedStudentAPI = '$Host$Path/UpsertEngagedStudent';

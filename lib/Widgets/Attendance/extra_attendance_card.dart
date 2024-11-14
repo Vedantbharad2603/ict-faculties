@@ -45,7 +45,8 @@ class ExtraScheduleCard extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: backgroundColor,
+                  border: Border.all(color: muGrey,width: 1.5),
                   borderRadius: BorderRadius.circular(getSize(context, 2.5)),
                   boxShadow: [
                     BoxShadow(
@@ -135,7 +136,8 @@ class ExtraScheduleCard extends StatelessWidget {
                               child: InkWell(
                                 onTap: () => Get.toNamed("/markExtraAttendance", arguments: {
                                   'faculty_id': facultyId,
-                                  'lec_data': arg,
+                                  'subject_id': subjectId,
+                                  'schedule' : arg,
                                   'selected_date': selectedDate,
                                 }),
                                 child: Card(

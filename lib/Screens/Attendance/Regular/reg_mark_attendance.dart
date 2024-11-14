@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Models/reg_attendance_list.dart';
 import 'package:ict_faculties/Models/reg_attendance_schedule.dart';
-import 'package:ict_faculties/Models/reg_mark_attendance.dart';
+import 'package:ict_faculties/Models/reg_mark_attendance_data.dart';
 import 'package:ict_faculties/Network/API.dart';
 import 'package:ict_faculties/Screens/Loading/mu_loading_screen.dart';
 import 'package:intl/intl.dart';

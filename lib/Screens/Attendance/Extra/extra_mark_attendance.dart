@@ -3,14 +3,14 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ict_faculties/Models/extra_attendance_list.dart';
+import 'package:ict_faculties/Models/extra_attendance_schedule.dart';
+import 'package:ict_faculties/Models/extra_mark_attendance_data.dart';
 import 'package:ict_faculties/Network/API.dart';
 import 'package:ict_faculties/Controllers/attendance_controller.dart';
 import 'package:ict_faculties/Helper/Colors.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Helper/Style.dart';
-import 'package:ict_faculties/Models/reg_attendance_list.dart';
-import 'package:ict_faculties/Models/reg_mark_attendance.dart';
-import 'package:ict_faculties/Models/reg_attendance_schedule.dart';
 import 'package:ict_faculties/Screens/Loading/mu_loading_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -24,24 +24,27 @@ class MarkExtraAttendance extends StatefulWidget {
 class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
   final AttendanceController attendanceController =
   Get.put(AttendanceController());
-  List<RegAttendanceList>? attendanceDataList;
-  List<RegAttendanceList>? attendanceDataCopyList;
-  List<RegMarkAttendanceData> uploadAttendanceDataList =[];
+  List<ExtraAttendanceList>? extraAttendanceDataList;
+  List<ExtraAttendanceList>? extraAttendanceDataCopyList;
+  List<ExtraMarkAttendanceData> uploadExtraAttendanceDataList =[];
 
   bool isLoading = false;
   bool isUploading = false;
   bool isSelectAll = true;
   late DateTime selectedDate;
   late int facultyId;
-  RegSchedule? scheduleData;
+  late int subjectId;
+  ExtraSchedule? scheduleData;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      scheduleData = Get.arguments['lec_data'];
+      subjectId = Get.arguments['subject_id'];
       selectedDate = Get.arguments['selected_date'];
       facultyId = Get.arguments['faculty_id'];
+      scheduleData = Get.arguments['schedule'];
+      // print("$subjectId + $facultyId + $selectedDate");
     });
     fetchAttendanceList();
   }
@@ -51,76 +54,60 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
       isLoading = true;
     });
     String formatedSelectedDate = DateFormat("yyyy-MM-dd").format(selectedDate);
-    List<RegAttendanceList>? fetchedAttendanceDataList =
-    await attendanceController.getAttendanceList(
-        scheduleData!.subjectID,
-        scheduleData!.classID,
+    List<ExtraAttendanceList>? fetchedExtraAttendanceDataList =
+    await attendanceController.getExtraAttendanceList(
+        subjectId,
         facultyId,
-        formatedSelectedDate,
-        scheduleData!.startTime);
+        formatedSelectedDate);
     if (!mounted) return;
     setState(() {
-      attendanceDataList = fetchedAttendanceDataList;
-
-
-      print("------------------------------------------------\n AttendanceDataList = ");
-      for (var item in attendanceDataList!) {
-        print(item.toString());
-      }
-
-      createAttendanceCopy();
+      extraAttendanceDataList = fetchedExtraAttendanceDataList;
       isLoading = false;
     });
+    createAttendanceCopy();
   }
+
   Future<void> createAttendanceCopy() async {
-    setState(() {
-      // Create a copy of the attendance list and update status for 'na' to 'pr'
-      attendanceDataCopyList = attendanceDataList?.map((attendance) {
-        // Ensure the item is of type AttendanceList
-        RegAttendanceList copiedAttendance = attendance.copyWith(
-          newStatus: attendance.status == 'na' ? 'pr' : attendance.status,
-        );
-        return copiedAttendance;
-      }).toList();
-    });
-    print("------------------------------------------------\n CopyiedAttendanceDataList = ");
-    for (var item in attendanceDataCopyList!) {
-      print(item.toString());
-    }
+    extraAttendanceDataCopyList = extraAttendanceDataList?.map((attendance) {
+      ExtraAttendanceList copiedAttendance = attendance.copyWith();
+      return copiedAttendance;
+    }).toList();
   }
 
-
-  Future<void> uploadAttendance() async {
+  Future<void> uploadExtraAttendance() async {
     setState(() {
       isUploading = true;
     });
 
     // Loop through each student and add only modified records to the list
-    for (int i = 0; i < attendanceDataCopyList!.length; i++) {
-      // Check if the status in attendanceDataCopyList is different from attendanceDataList
-      if (attendanceDataList![i].status != attendanceDataCopyList![i].status) {
-        uploadAttendanceDataList.add(RegMarkAttendanceData(
-          subjectId: scheduleData!.subjectID,
+    for (int i = 0; i < extraAttendanceDataCopyList!.length; i++) {
+      if (extraAttendanceDataList![i].count != extraAttendanceDataCopyList![i].count) {
+        uploadExtraAttendanceDataList.add(ExtraMarkAttendanceData(
+          subjectId: subjectId,
           facultyId: facultyId,
-          studentId: attendanceDataCopyList![i].studentID,
+          studentId: extraAttendanceDataCopyList![i].studentID,
           date: DateFormat("yyyy-MM-dd").format(selectedDate),
-          status: attendanceDataCopyList![i].status,
-          classStartTime: scheduleData!.startTime,
-          classEndTime: scheduleData!.endTime,
-          lecType: scheduleData!.lecType,
+          count: extraAttendanceDataCopyList![i].count,
         ));
       }
     }
-
+    print("------------------------------------------------\n ExtraAttendanceDataList = ");
+    for (var item in extraAttendanceDataList!) {
+      print(item.toString());
+    }
+    print("------------------------------------------------\n ExtraExtraAttendanceDataCopyList = ");
+    for (var item in extraAttendanceDataCopyList!) {
+      print(item.toString());
+    }
     // Print to verify the data being uploaded
     print("------------------------------------------------\n Upload Time = ");
-    for (var item in uploadAttendanceDataList) {
+    for (var item in uploadExtraAttendanceDataList) {
       print(item.toString());
     }
 
     // Check if there is any data to upload
-    if (uploadAttendanceDataList.isNotEmpty) {
-      bool success = await attendanceController.uploadAttendance(uploadAttendanceDataList);
+    if (uploadExtraAttendanceDataList.isNotEmpty) {
+      bool success = await attendanceController.uploadExtraAttendance(uploadExtraAttendanceDataList);
 
       // Show success or error alert based on the result
       if (success) {
@@ -178,7 +165,7 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
 
 
 
-  void showStudentDetails(RegAttendanceList attendanceList) {
+  void showStudentDetails(ExtraAttendanceList attendanceList) {
     Get.defaultDialog(
       title: "Student Details",
       titleStyle:
@@ -297,28 +284,11 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
     );
   }
 
-  // Function to handle Select All checkbox behavior
-  void handleSelectAll(bool? value) {
-    setState(() {
-      isSelectAll = value!;
-      for (var attendanceList in attendanceDataCopyList!) {
-        if (attendanceList.status != 'oe' && attendanceList.status != 'gl') {
-          attendanceList.status = isSelectAll ? 'pr' : 'ab';
-        }
-      }
-    });
-  }
-
-  // Check if all non-disabled checkboxes are selected
-  bool checkIfAllSelected() {
-    return attendanceDataCopyList!.where((attendanceList) {
-      return attendanceList.status != 'oe' && attendanceList.status != 'gl';
-    }).every((attendanceList) => attendanceList.status == 'pr');
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: Text("Mark Extra Attendance", style: AppbarStyle),
         centerTitle: true,
@@ -353,21 +323,7 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
                                 color: Colors.black),
                           ),
                           Text(
-                            'Class ',
-                            style: TextStyle(
-                                fontSize: getSize(context, 2),
-                                fontFamily: "mu_bold",
-                                color: Colors.black),
-                          ),
-                          Text(
-                            'Time ',
-                            style: TextStyle(
-                                fontSize: getSize(context, 2),
-                                fontFamily: "mu_bold",
-                                color: Colors.black),
-                          ),
-                          Text(
-                            'Location ',
+                            'Sem ',
                             style: TextStyle(
                                 fontSize: getSize(context, 2),
                                 fontFamily: "mu_bold",
@@ -389,47 +345,14 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            ': ${scheduleData!.shortName} - [${scheduleData!.subjectCode}]',
-                            style: TextStyle(
-                                fontSize: getSize(context, 2),
-                                fontFamily: "mu_bold",
-                                color: muColor),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                ": ${scheduleData!.className}",
-                                style: TextStyle(
-                                    fontSize: getSize(context, 2),
-                                    fontFamily: "mu_bold",
-                                    color: muColor),
-                              ),
-                              SizedBox(width: getWidth(context, 0.1)),
-                              Text(
-                                'Batch ',
-                                style: TextStyle(
-                                    fontSize: getSize(context, 2),
-                                    fontFamily: "mu_bold",
-                                    color: Colors.black),
-                              ),
-                              Text(
-                                ": ${scheduleData!.batch.toUpperCase()}",
-                                style: TextStyle(
-                                    fontSize: getSize(context, 2),
-                                    fontFamily: "mu_bold",
-                                    color: muColor),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            ': ${scheduleData!.startTime.substring(0, 5)}  to  ${scheduleData!.endTime.substring(0, 5)}',
+                            ': ${scheduleData?.shortName ?? 'N/A'} - [${scheduleData?.subjectCode ?? 'N/A'}]',
                             style: TextStyle(
                                 fontSize: getSize(context, 2),
                                 fontFamily: "mu_bold",
                                 color: muColor),
                           ),
                           Text(
-                            ': ${scheduleData!.classLocation}',
+                            ": ${scheduleData?.sem ?? 'N/A'} - ${scheduleData?.eduType ?? 'N/A'}",
                             style: TextStyle(
                                 fontSize: getSize(context, 2),
                                 fontFamily: "mu_bold",
@@ -446,23 +369,6 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
                       ),
                     ],
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Checkbox(
-                        value: isSelectAll,
-                        onChanged: (value) {
-                          handleSelectAll(value);
-                        },
-                        activeColor: muColor,
-                      ),
-                      Text(
-                        'Select All',
-                        style: TextStyle(
-                            fontFamily: "mu_bold", fontSize: getSize(context, 2.5)),
-                      ),
-                    ],
-                  ),
                   Divider(),
                   Expanded(
                     child: isLoading
@@ -475,40 +381,19 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
                         ),
                       ),
                     )
-                        : attendanceDataCopyList != null &&
-                        attendanceDataCopyList!.isNotEmpty
-                        ? GridView.builder(
+                        : extraAttendanceDataCopyList != null &&
+                        extraAttendanceDataCopyList!.isNotEmpty
+                        ? ListView.builder(
                       shrinkWrap: true,
-                      itemCount: attendanceDataCopyList!.length,
-                      gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // 2 items per row
-                        crossAxisSpacing:
-                        10.0, // spacing between items horizontally
-                        mainAxisSpacing:
-                        5.0, // spacing between items vertically
-                        childAspectRatio:
-                        3, // controls the size of each tile, adjust this for the desired look
-                      ),
+                      itemCount: extraAttendanceDataCopyList!.length,
                       itemBuilder: (context, index) {
-                        RegAttendanceList attendanceList =
-                        attendanceDataCopyList![index];
-                        bool isDisabled = attendanceList.status == 'oe' ||
-                            attendanceList.status == 'gl';
-
+                        ExtraAttendanceList attendanceList =
+                        extraAttendanceDataCopyList![index];
                         return InkWell(
                           onLongPress: () =>
                               showStudentDetails(attendanceList),
-                          onTap: isDisabled
-                              ? null
-                              : () {
-                            setState(() {
-                              attendanceList.status =
-                              attendanceList.status == 'pr'
-                                  ? 'ab'
-                                  : 'pr';
-                              isSelectAll = checkIfAllSelected();
-                            });
+                          onTap: () {
+                            setState(() {});
                           },
                           highlightColor: Colors.transparent,
                           splashColor: Colors.transparent,
@@ -516,76 +401,103 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
                             padding:
                             const EdgeInsets.symmetric(vertical: 5.0),
                             child: Container(
-                              height: getHeight(context, 0.05),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
                                   width: 2,
-                                  color: isDisabled
-                                      ? Colors.green
-                                      : attendanceList.status == "pr"
+                                  color:attendanceList.count !=0
                                       ? muColor
                                       : Colors.red,
                                 ),
                                 borderRadius:
                                 BorderRadius.circular(500.0),
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                      attendanceList.enrollment!,
-                                      style: TextStyle(
-                                        fontFamily: 'mu_reg',
-                                        fontSize: getSize(context, 2.3),
-                                        color: isDisabled
-                                            ? Colors.green
-                                            : attendanceList.status ==
-                                            "pr"
-                                            ? muColor
-                                            : Colors.red,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(left: 10.0),
+                                      child: Container(
+                                        width: getWidth(context, 0.6),
+                                        // color: Colors.red,
+                                        child: Text(
+                                          "${attendanceList.enrollment!} - ${attendanceList.studentName}" ,
+                                         overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontFamily: 'mu_reg',
+                                            fontSize: getSize(context, 2.3),
+                                            color: attendanceList.count !=0
+                                                ? muColor
+                                                : Colors.red,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Checkbox(
-                                    value: attendanceList.status == 'pr',
-                                    onChanged: isDisabled
-                                        ? null
-                                        : (value) {
-                                      setState(() {
-                                        attendanceList.status =
-                                        value! ? 'pr' : 'ab';
-                                        isSelectAll =
-                                            checkIfAllSelected();
-                                      });
-                                    },
-                                    checkColor: Colors.white,
-                                    side: BorderSide(
-                                      color: isDisabled
-                                          ? Colors.green
-                                          : Colors.red,
-                                      width: 2,
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(right: 10.0),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0,0,10,0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  // Decrease the count if it's greater than 0
+                                                  if (extraAttendanceDataCopyList![index].count! > 0) {
+                                                    extraAttendanceDataCopyList![index].count = extraAttendanceDataCopyList![index].count!-1;
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                height: getSize(context, 4),
+                                                width: getSize(context, 4),
+                                                child: Icon(Icons.remove,color: Colors.white,),
+                                                decoration: BoxDecoration(
+                                                  color:attendanceList.count !=0 ? muColor : Colors.red,
+                                                  borderRadius: BorderRadius.circular(500)
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            attendanceList.count.toString(),
+                                            style: TextStyle(
+                                              fontFamily: 'mu_bold',
+                                              fontSize: getSize(context, 2.5),
+                                              color: attendanceList.count !=0
+                                                  ? muColor
+                                                  : Colors.red,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                                            child: InkWell(
+                                              onTap: (){
+                                                setState(() {
+                                                  extraAttendanceDataCopyList![index].count = extraAttendanceDataCopyList![index].count!+1;
+                                                });
+                                              },
+                                              child: Container(
+                                                height: getSize(context, 4),
+                                                width: getSize(context, 4),
+                                                child: Icon(Icons.add,color: Colors.white,),
+                                                decoration: BoxDecoration(
+                                                    color:attendanceList.count !=0 ? muColor : Colors.red,
+                                                    borderRadius: BorderRadius.circular(500)
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    activeColor: isDisabled
-                                        ? Colors.green
-                                        : attendanceList.status == "pr"
-                                        ? muColor
-                                        : Colors.red,
-                                    fillColor: isDisabled
-                                        ? MaterialStateProperty
-                                        .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                        return Colors
-                                            .green; // Disabled state color
-                                      },
-                                    )
-                                        : null,
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -610,7 +522,7 @@ class _MarkExtraAttendanceState extends State<MarkExtraAttendance> {
                             confirmButtonColor: muColor,
                             onConfirm: () async {
                               Get.back();
-                              uploadAttendance();
+                              uploadExtraAttendance();
                             },
                             title: "Confirm Attendance",
                             dialogDecoration: BoxDecoration(

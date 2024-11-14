@@ -7,12 +7,14 @@ class AdaptiveLoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Center(
-        child: CircularProgressIndicator.adaptive(
-          valueColor: AlwaysStoppedAnimation(muColor),
+    return Expanded(
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        body: Center(
+          child: CircularProgressIndicator.adaptive(
+            valueColor: AlwaysStoppedAnimation(muColor),
 
+          ),
         ),
       ),
     );

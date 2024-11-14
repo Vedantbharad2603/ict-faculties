@@ -86,7 +86,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
     String formattedDate = DateFormat('dd-MMM-yyyy').format(selectedDate);
     // Filter the attendance list based on the selected date
     return Scaffold(
-      backgroundColor: muGrey,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: Text("Attendance Schedule", style: AppbarStyle),
         centerTitle: true,
@@ -98,8 +98,7 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
           },
         ),
       ),
-      body:  isLoading ? AdaptiveLoadingScreen()
-          : RefreshIndicator.adaptive(
+      body: RefreshIndicator.adaptive(
         onRefresh: fetchSchedule,
         color: backgroundColor,
         backgroundColor: muColor,
@@ -131,7 +130,8 @@ class _TakeAttendanceScreenState extends State<TakeAttendanceScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Divider(),
             ),
-           scheduleDataList != null && scheduleDataList!.isNotEmpty
+            isLoading ? AdaptiveLoadingScreen()
+                :scheduleDataList != null && scheduleDataList!.isNotEmpty
                 ? Expanded(
                   child:
                   ListView.builder(

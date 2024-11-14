@@ -4,7 +4,7 @@ import 'package:ict_faculties/Helper/Components.dart';
 
 import '../../Helper/Colors.dart';
 
-class ScheduleCard extends StatelessWidget {
+class ExtAttendanceMarkChip extends StatelessWidget {
   final BuildContext context;
   final int facultyId;
   final int sem;
@@ -24,7 +24,7 @@ class ScheduleCard extends StatelessWidget {
   final DateTime selectedDate;
   final dynamic arg;
 
-  const ScheduleCard({super.key,
+  const ExtAttendanceMarkChip({super.key,
     required this.context,
     required this.facultyId,
     required this.sem,
@@ -56,8 +56,7 @@ class ScheduleCard extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: backgroundColor,
-                border: Border.all(color: muGrey,width: 1.5),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(getSize(context, 2.5)),
                 boxShadow: [
                   BoxShadow(
@@ -123,7 +122,7 @@ class ScheduleCard extends StatelessWidget {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(4,10,0,25),
+                              padding: EdgeInsets.fromLTRB(7,10,0,25),
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: _buildAttendanceButton(),

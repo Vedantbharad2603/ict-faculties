@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:ict_faculties/Models/extra_attendance_list.dart';
 import 'package:ict_faculties/Models/extra_attendance_schedule.dart';
+import 'package:ict_faculties/Models/extra_mark_attendance_data.dart';
 import 'package:ict_faculties/Models/reg_attendance_list.dart';
 import 'package:ict_faculties/Models/reg_attendance_schedule.dart';
-import 'package:ict_faculties/Models/reg_mark_attendance.dart';
+import 'package:ict_faculties/Models/reg_mark_attendance_data.dart';
 import 'package:ict_faculties/Network/API.dart';
 
 class AttendanceController extends GetxController {
@@ -94,6 +96,37 @@ class AttendanceController extends GetxController {
     }
   }
 
+  Future<List<ExtraAttendanceList>?> getExtraAttendanceList(
+      int sub_id, int fid,String cdate) async {
+    try {
+      Map<String, dynamic> body = {
+        'sub_id': sub_id,
+        'f_id':fid,
+        'c_date': cdate,
+      };
+
+      final response = await http.post(
+        Uri.parse(getExtraAttendanceListAPI),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = json.decode(response.body);
+        print(responseData);
+        List<ExtraAttendanceList> ExtraAttendanceDataList = responseData
+            .map((attendanceData) => ExtraAttendanceList.fromJson(attendanceData))
+            .toList();
+
+        return ExtraAttendanceDataList;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
   Future<bool> uploadAttendance(List<RegMarkAttendanceData> attendanceData) async {
     try {
       // Ensure the attendance data is not empty
@@ -114,6 +147,40 @@ class AttendanceController extends GetxController {
         body: json.encode(body),
       );
       print(uploadAttendanceAPI);
+      if (response.statusCode == 200) {
+        print('Attendance uploaded successfully');
+        return true;
+      } else {
+        print('Failed to upload attendance. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Error uploading attendance: $e');
+      return false;
+    }
+  }
+
+  Future<bool> uploadExtraAttendance(List<ExtraMarkAttendanceData> extraAttendanceData) async {
+    try {
+      // Ensure the attendance data is not empty
+      if (extraAttendanceData.isEmpty) {
+        print('No attendance data available to upload');
+        return false;
+      }
+
+      // Convert each attendance record to JSON using the model's toJson method
+      List<Map<String, dynamic>> body = extraAttendanceData.map((data) => data.toJson()).toList();
+
+      print("----------------------------------------------\n Sending data: ");
+      print(json.encode(body));
+
+      final response = await http.post(
+        Uri.parse(uploadExtraAttendanceAPI),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
+      );
+
       if (response.statusCode == 200) {
         print('Attendance uploaded successfully');
         return true;
