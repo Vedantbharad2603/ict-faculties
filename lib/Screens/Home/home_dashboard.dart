@@ -9,7 +9,7 @@ import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Models/faculty.dart';
 import 'package:ict_faculties/Network/API.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../Helper/Colors.dart';
+import '../../Helper/colors.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -21,11 +21,9 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final box = GetStorage();
   late Faculty userData;
-  LoginController loginControl = Get.put(LoginController());
 
   @override
   void initState() {
-    _checkUpdated();
     super.initState();
     Map<String, dynamic> storedData = box.read('userdata');
     print("from dashboard");
@@ -51,32 +49,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  _checkUpdated() async {
-
-    if(!await loginControl.checkVersion('faculty',CurrentVersion))
-    {
-      ArtSweetAlert.show(
-        barrierDismissible: false,
-        context: context,
-        artDialogArgs:
-        ArtDialogArgs(
-          type: ArtSweetAlertType.warning,
-          sizeSuccessIcon: 70,
-          confirmButtonText: "Update Now", // Hides the confirm button
-          confirmButtonColor: muColor,
-          onConfirm: () async {
-            String url = 'https://devanpatel28.blogspot.com/';
-            await launch(url);
-          },
-          title: "App update available!",
-          dialogDecoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-          ),
-        ),
-      );
-    }
-  }
 
 
   @override
@@ -146,9 +118,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   childAspectRatio: 0.9,
                   padding: EdgeInsets.all(10), // Padding for the GridView
                   children: [
-                    TapIcons(context, "Attendance", 2, "attendance.png", 45, "/takeAttendance", {'faculty_id': userData.id}),
+                    TapIcons(context, "Attendance", 2, "attendance.png", 45, "/regAttendanceSchedule", {'faculty_id': userData.id}),
                     TapIcons(context, "Student Engaged", 2, "attendance.png", 45, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
-                    TapIcons(context, "Extra Attendance", 2, "attendance.png", 45, "/takeExtraAttendance", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    TapIcons(context, "Extra Attendance", 2, "attendance.png", 45, "/extraAttendanceSchedule", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    // TapIcons(context, "TESTING", 2, "attendance.png", 45, "/test",null),
                   ],
                 ),
               ),

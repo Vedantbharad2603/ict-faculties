@@ -20,6 +20,7 @@ dependencies:
   art_sweetalert: ^0.0.5
   expandable: ^5.0.1
   url_launcher: ^6.3.1
+  connectivity_plus: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +33,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/MainIcons/
+    - assets/images/Exception/
     - assets/gifs/
   fonts:
     - family: mu_reg

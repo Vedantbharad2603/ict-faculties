@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:ict_faculties/Binding/extra_mark_attendance_binding.dart';
+import 'package:ict_faculties/Binding/reg_attendance_schedule_binding.dart';
+import 'package:ict_faculties/Binding/reg_mark_attendance_binding.dart';
 import 'package:ict_faculties/Binding/splash_binding.dart';
 import 'package:ict_faculties/Screens/Attendance/Extra/extra_mark_attendance.dart';
+import 'package:ict_faculties/Screens/Exception/no_schedule_available.dart';
+import 'package:ict_faculties/Screens/Exception/no_students_available.dart';
 import 'package:ict_faculties/Screens/StudentEngage/add_engage_student.dart';
 import 'package:ict_faculties/Screens/Attendance/Extra/extra_attendance_schedule.dart';
 import 'package:ict_faculties/Screens/StudentEngage/engage_students_list.dart';
+import 'Binding/extra_attendance_schedule_binding.dart';
 import 'Screens/Attendance/Regular/reg_mark_attendance.dart';
 import 'Screens/Attendance/Regular/reg_attendance_schedule.dart';
 import 'Screens/Home/home_dashboard.dart';
@@ -51,21 +57,30 @@ class MyApp extends StatelessWidget {
             transition: Transition.fadeIn,
             page: () => const Addstudentengaged()),
         GetPage(
-            name: "/takeAttendance",
+            name: "/regAttendanceSchedule",
             transition: Transition.fadeIn,
-            page: () => const TakeAttendanceScreen()),
+            binding: RegAttendanceScheduleBinding(),
+            page: () => const RegAttendanceSchedule()
+        ),
         GetPage(
-            name: "/markAttendance",
+            name: "/markARegAttendance",
             transition: Transition.fadeIn,
-            page: () => const MarkAttendance()),
+            binding: RegMarkAttendanceBinding(),
+            page: () => const RegMarkAttendance()),
         GetPage(
-            name: "/takeExtraAttendance",
+            name: "/extraAttendanceSchedule",
             transition: Transition.fadeIn,
+            binding: ExtraAttendanceScheduleBinding(),
             page: () => const ExtraAttendanceSchedule()),
         GetPage(
             name: "/markExtraAttendance",
             transition: Transition.fadeIn,
+            binding: ExtraMarkAttendanceBinding(),
             page: () => const MarkExtraAttendance()),
+        GetPage(
+            name: "/test",
+            transition: Transition.fadeIn,
+            page: () => const NoScheduleAvailable()),
       ],
       initialRoute: "/splashscreen",
     );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ict_faculties/Controllers/student_controller.dart';
-import 'package:ict_faculties/Helper/Colors.dart';
+import 'package:ict_faculties/Controllers/student_engaged_controller.dart';
+import 'package:ict_faculties/Helper/colors.dart';
 import 'package:ict_faculties/Helper/Style.dart';
 import 'package:ict_faculties/Models/engage_student.dart';
+import 'package:ict_faculties/Screens/Exception/data_not_found.dart';
+import 'package:ict_faculties/Screens/Exception/no_students_available.dart';
 import 'package:ict_faculties/Screens/Loading/adaptive_loading_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -145,35 +147,17 @@ class _EngagedStudentScreenState extends State<EngagedStudentScreen>
       backgroundColor: backgroundColor,
       onRefresh: fetchEngagedStudentDetail,
       child: students.isEmpty
-          ? Center(
-        child: Text(
-          "No Student Available",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-          ),
-        ),
-      )
+          ? DataNotFound()
           : ListView.builder(
         itemCount: students.length,
         itemBuilder: (context, index) {
           var student = students[index];
-
           return Container(
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: muGrey,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
-                ),
-              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

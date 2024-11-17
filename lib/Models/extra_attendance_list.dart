@@ -45,7 +45,7 @@ class ExtraAttendanceList {
     };
   }
 
-  ExtraAttendanceList copyWith() {
+  ExtraAttendanceList copyWith({int? newCount}) {
     return ExtraAttendanceList(
       studentID: this.studentID,
       enrollment: this.enrollment,
@@ -53,7 +53,7 @@ class ExtraAttendanceList {
       studentName: this.studentName,
       classname: this.classname,
       classBatch: this.classBatch,
-      count: this.count,
+      count: newCount ?? this.count,
     );
   }
 }

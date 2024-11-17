@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:ict_faculties/Controllers/login_controller.dart';
-import 'package:ict_faculties/Helper/Colors.dart';
+import 'package:ict_faculties/Helper/colors.dart';
+import 'package:ict_faculties/Helper/images_path.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,8 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Image(
-                    image: AssetImage('assets/images/mu_logo.png'),
+                  Image(
+                    image: AssetImage(MuLogo),
                     height: 100,
                   ),
                   const SizedBox(height: 50),

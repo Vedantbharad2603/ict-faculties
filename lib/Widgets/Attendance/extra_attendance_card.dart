@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ict_faculties/Helper/Colors.dart';
+import 'package:ict_faculties/Helper/colors.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 
 class ExtraScheduleCard extends StatelessWidget {

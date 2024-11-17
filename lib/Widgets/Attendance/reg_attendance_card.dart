@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 
-import '../../Helper/Colors.dart';
+import '../../Helper/colors.dart';
 
 class ScheduleCard extends StatelessWidget {
   final BuildContext context;
@@ -123,7 +123,7 @@ class ScheduleCard extends StatelessWidget {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(4,10,0,25),
+                              padding: EdgeInsets.fromLTRB(0,10,0,25),
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: _buildAttendanceButton(),
@@ -192,7 +192,7 @@ class ScheduleCard extends StatelessWidget {
 
   Widget _buildAttendanceButton() {
     return InkWell(
-      onTap: () => Get.toNamed("/markAttendance", arguments: {
+      onTap: () => Get.toNamed("/markARegAttendance", arguments: {
         'faculty_id': facultyId,
         'lec_data': arg,
         'selected_date': selectedDate,

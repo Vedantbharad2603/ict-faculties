@@ -48,27 +48,4 @@ class LoginController extends GetxController {
       return false;
     }
   }
-  Future<bool> checkVersion(String login, String code) async {
-    try {
-      Map<String, String> body = {
-        'login': login,
-        'code': code
-      };
-
-      final response = await http.post(
-        Uri.parse(validateVersionAPI),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(body),
-      );
-
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      print('Error: $e');
-      return false;
-    }
-  }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:ict_faculties/Helper/Colors.dart';
+import 'package:ict_faculties/Helper/colors.dart';
 
 import 'Style.dart';
 
@@ -233,7 +233,7 @@ Widget TapIcons(
   );
 }
 
-Heading1(context, String str, double size, double leftPad) {
+Widget Heading1(context, String str, double size, double leftPad) {
   return Padding(
     padding: EdgeInsets.only(top: 8.0, bottom: 4, left: leftPad),
     child: Row(

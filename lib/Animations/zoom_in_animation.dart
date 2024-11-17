@@ -24,7 +24,7 @@ class _ZoomInAnimationState extends State<ZoomInAnimation>
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: 250), // Duration of the zoom effect
+      duration: Duration(milliseconds: 200), // Duration of the zoom effect
       vsync: this,
     );
 

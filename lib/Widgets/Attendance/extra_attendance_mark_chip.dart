@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 
-import '../../Helper/Colors.dart';
+import '../../Helper/colors.dart';
 
 class ExtAttendanceMarkChip extends StatelessWidget {
   final BuildContext context;

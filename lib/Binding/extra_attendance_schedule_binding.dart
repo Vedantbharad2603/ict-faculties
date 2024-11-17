@@ -1,14 +1,13 @@
 import 'package:get/get.dart';
-import 'package:ict_faculties/Controllers/splash_controller.dart';
 
+import '../Controllers/extra_attendance_schedule_controller.dart';
 import '../Controllers/internet_connectivity.dart';
 
-class SplashBinding extends Bindings{
+class ExtraAttendanceScheduleBinding extends Bindings{
   @override
   void dependencies() {
     // TODO: implement dependencies
     Get.put(InternetConnectivityController());
-    Get.put(SplashController());
+    Get.put(ExtraAttendanceScheduleController());
   }
-
 }
