@@ -40,7 +40,10 @@ class RegMarkAttendanceController extends GetxController {
       };
       final response = await http.post(
         Uri.parse(getAttendanceListAPI),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
         body: json.encode(body),
       );
       if (response.statusCode == 200) {
@@ -123,7 +126,10 @@ class RegMarkAttendanceController extends GetxController {
 
         final response = await http.post(
           Uri.parse(uploadAttendanceAPI),
-          headers: {'Content-Type': 'application/json'},
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': validApiKey,
+          },
           body: json.encode(body),
         );
 

@@ -28,7 +28,9 @@ class RegAttendanceScheduleController extends GetxController {
     if (!internetController.isConnected.value) {
       print("No Internet");
       isLoadingFetchSchedule.value = false;
-      Utils().showInternetAlert(context: Get.context!, onConfirm: ()=>fetchSchedule(date: selectedDate.value));
+      Utils().showInternetAlert(
+          context: Get.context!,
+          onConfirm: () => fetchSchedule(date: selectedDate.value));
     } else {
       String todayDate = DateFormat('yyyy-MM-dd').format(date);
       List<RegSchedule>? fetchedScheduleDataList =
@@ -46,7 +48,10 @@ class RegAttendanceScheduleController extends GetxController {
 
       final response = await http.post(
         Uri.parse(getScheduleAPI),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
         body: json.encode(body),
       );
 

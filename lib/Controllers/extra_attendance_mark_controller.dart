@@ -43,8 +43,10 @@ class ExtraMarkAttendanceController extends GetxController {
           context: Get.context!, onConfirm: () => fetchExtraAttendanceList());
     } else {
       String formatedSelectedDate =
-      DateFormat("yyyy-MM-dd").format(selectedDate);
-      List<ExtraAttendanceList> fetchedAttendanceDataList = await getExtraAttendanceList(scheduleData.subjectID, facultyId, formatedSelectedDate);
+          DateFormat("yyyy-MM-dd").format(selectedDate);
+      List<ExtraAttendanceList> fetchedAttendanceDataList =
+          await getExtraAttendanceList(
+              scheduleData.subjectID, facultyId, formatedSelectedDate);
 
       extraAttendanceDataList.assignAll(fetchedAttendanceDataList);
       createExtraAttendanceCopy();
@@ -52,25 +54,28 @@ class ExtraMarkAttendanceController extends GetxController {
     }
   }
 
-
-
-  Future<List<ExtraAttendanceList>> getExtraAttendanceList(int subId, int fid,String cdate) async {
+  Future<List<ExtraAttendanceList>> getExtraAttendanceList(
+      int subId, int fid, String cdate) async {
     try {
       Map<String, dynamic> body = {
         'sub_id': subId,
-        'f_id':fid,
+        'f_id': fid,
         'c_date': cdate,
       };
       final response = await http.post(
         Uri.parse(getExtraAttendanceListAPI),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
         body: json.encode(body),
       );
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
         print(responseData);
         List<ExtraAttendanceList> ExtraAttendanceDataList = responseData
-            .map((attendanceData) => ExtraAttendanceList.fromJson(attendanceData))
+            .map((attendanceData) =>
+                ExtraAttendanceList.fromJson(attendanceData))
             .toList();
 
         return ExtraAttendanceDataList;
@@ -107,32 +112,35 @@ class ExtraMarkAttendanceController extends GetxController {
       }
     }
 
-      if (!internetController.isConnected.value) {
+    if (!internetController.isConnected.value) {
+      isUploadingExtraAttendance.value = false;
+      Utils().showInternetAlert(
+          context: Get.context!, onConfirm: () => uploadExtraAttendance());
+    } else {
+      if (uploadExtraAttendanceDataList.isEmpty) {
+        Utils().showNoChangesUploadAlert();
         isUploadingExtraAttendance.value = false;
-        Utils().showInternetAlert(
-            context: Get.context!, onConfirm: () => uploadExtraAttendance());
-      } else {
-        if (uploadExtraAttendanceDataList.isEmpty) {
-          Utils().showNoChangesUploadAlert();
-          isUploadingExtraAttendance.value=false;
-          return;
-        }
-        List<Map<String, dynamic>> body =
-        uploadExtraAttendanceDataList.map((data) => data.toJson()).toList();
-        print("----------------------------------------------\n Sending data: ");
-        print(json.encode(body));
-        final response = await http.post(
-          Uri.parse(uploadExtraAttendanceAPI),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode(body),
-        );
-
-        if (response.statusCode == 200) {
-          Utils().showUploadSuccessAlert();
-        } else {
-          Utils().showUploadFailedAlert();
-        }
+        return;
       }
+      List<Map<String, dynamic>> body =
+          uploadExtraAttendanceDataList.map((data) => data.toJson()).toList();
+      print("----------------------------------------------\n Sending data: ");
+      print(json.encode(body));
+      final response = await http.post(
+        Uri.parse(uploadExtraAttendanceAPI),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
+        body: json.encode(body),
+      );
+
+      if (response.statusCode == 200) {
+        Utils().showUploadSuccessAlert();
+      } else {
+        Utils().showUploadFailedAlert();
+      }
+    }
     isUploadingExtraAttendance.value = false;
   }
 }

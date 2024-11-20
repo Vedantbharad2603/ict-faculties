@@ -36,12 +36,16 @@ class SplashController extends GetxController {
       await controller.checkConnection();
       if (!controller.isConnected.value) {
         print("No Internet");
-       Utils().showInternetAlert(context: Get.context!, onConfirm: checkVersion);
+        Utils()
+            .showInternetAlert(context: Get.context!, onConfirm: checkVersion);
       } else {
         Map<String, String> body = {'login': 'faculty', 'code': CurrentVersion};
         final response = await http.post(
           Uri.parse(validateVersionAPI),
-          headers: {'Content-Type': 'application/json'},
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': validApiKey,
+          },
           body: json.encode(body),
         );
 
@@ -74,5 +78,4 @@ class SplashController extends GetxController {
       return false;
     }
   }
-
 }

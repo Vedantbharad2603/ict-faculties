@@ -14,7 +14,10 @@ class StudentController extends GetxController {
 
       final response = await http.post(
         Uri.parse(getStudentByCCAPI),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
         body: json.encode(body),
       );
 
@@ -24,9 +27,8 @@ class StudentController extends GetxController {
         List<dynamic> responseData = json.decode(response.body);
 
         // Map to List<EngagedStudent> using fromJson
-        List<Student> studentDataList = responseData
-            .map((json) => Student.fromJson(json))
-            .toList();
+        List<Student> studentDataList =
+            responseData.map((json) => Student.fromJson(json)).toList();
         print(studentDataList);
         return studentDataList;
       } else {
@@ -46,7 +48,10 @@ class StudentController extends GetxController {
 
       final response = await http.post(
         Uri.parse(getEngagedStudentByCCAPI),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
         body: json.encode(body),
       );
 
@@ -56,9 +61,8 @@ class StudentController extends GetxController {
         List<dynamic> responseData = json.decode(response.body);
 
         // Map to List<EngagedStudent> using fromJson
-        List<EngagedStudent> engagedStudentDataList = responseData
-            .map((json) => EngagedStudent.fromJson(json))
-            .toList();
+        List<EngagedStudent> engagedStudentDataList =
+            responseData.map((json) => EngagedStudent.fromJson(json)).toList();
         print(engagedStudentDataList);
         return engagedStudentDataList;
       } else {

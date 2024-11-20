@@ -9,17 +9,16 @@ class LoginController extends GetxController {
   final box = GetStorage();
 
   Future<bool> login(String username, String password) async {
-
     try {
       print("USERNAME = $username AND PASSWORD = $password");
-      Map<String, String> body = {
-        'username': username,
-        'password': password
-      };
-      print('LOGIN === '+validateLoginAPI);
+      Map<String, String> body = {'username': username, 'password': password};
+      print('LOGIN === ' + validateLoginAPI);
       final response = await http.post(
         Uri.parse(validateLoginAPI),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
         body: json.encode(body),
       );
 
@@ -28,7 +27,8 @@ class LoginController extends GetxController {
 
         if (responseData != null && responseData['faculties_details'] != null) {
           // Accessing the nested faculties_details
-          Faculty userData = Faculty.fromJson(responseData['faculties_details']);
+          Faculty userData =
+              Faculty.fromJson(responseData['faculties_details']);
 
           // Writing data to storage
           box.write('userdata', userData.toJson());

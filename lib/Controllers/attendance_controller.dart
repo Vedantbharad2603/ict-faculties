@@ -10,13 +10,8 @@ import 'package:ict_faculties/Models/reg_mark_attendance_data.dart';
 import 'package:ict_faculties/Network/API.dart';
 
 class AttendanceController extends GetxController {
-
-
-
-
-
-
-  Future<bool> uploadExtraAttendance(List<ExtraMarkAttendanceData> extraAttendanceData) async {
+  Future<bool> uploadExtraAttendance(
+      List<ExtraMarkAttendanceData> extraAttendanceData) async {
     try {
       // Ensure the attendance data is not empty
       if (extraAttendanceData.isEmpty) {
@@ -25,14 +20,18 @@ class AttendanceController extends GetxController {
       }
 
       // Convert each attendance record to JSON using the model's toJson method
-      List<Map<String, dynamic>> body = extraAttendanceData.map((data) => data.toJson()).toList();
+      List<Map<String, dynamic>> body =
+          extraAttendanceData.map((data) => data.toJson()).toList();
 
       print("----------------------------------------------\n Sending data: ");
       print(json.encode(body));
 
       final response = await http.post(
         Uri.parse(uploadExtraAttendanceAPI),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
         body: json.encode(body),
       );
 
@@ -40,7 +39,8 @@ class AttendanceController extends GetxController {
         print('Attendance uploaded successfully');
         return true;
       } else {
-        print('Failed to upload attendance. Status code: ${response.statusCode}');
+        print(
+            'Failed to upload attendance. Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
         return false;
       }
@@ -50,21 +50,26 @@ class AttendanceController extends GetxController {
     }
   }
 
-  Future<bool> upsertEngagedStudent(int? studentId,int? facultyId,String? reason,String? type,String? startDate,String? endDate) async {
-    print('$studentId --- $facultyId --- $reason --- $type --- $startDate --- $endDate');
+  Future<bool> upsertEngagedStudent(int? studentId, int? facultyId,
+      String? reason, String? type, String? startDate, String? endDate) async {
+    print(
+        '$studentId --- $facultyId --- $reason --- $type --- $startDate --- $endDate');
     try {
       Map<String, dynamic> body = {
-        'student_info_id':studentId,
-        'reason':reason,
-        'type':type,
-        'faculty_info_id':facultyId,
-        'start_date':startDate,
-        'end_date':endDate
+        'student_info_id': studentId,
+        'reason': reason,
+        'type': type,
+        'faculty_info_id': facultyId,
+        'start_date': startDate,
+        'end_date': endDate
       };
 
       final response = await http.post(
         Uri.parse(upsertEngagedStudentAPI),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': validApiKey,
+        },
         body: json.encode(body),
       );
       if (response.statusCode == 200) {

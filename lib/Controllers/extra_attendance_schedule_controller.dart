@@ -19,8 +19,9 @@ class ExtraAttendanceScheduleController extends GetxController {
     super.onInit();
     fetchExtraSchedule();
   }
+
   Future<void> fetchExtraSchedule() async {
-    isLoadingFetchExtraSchedule.value=true;
+    isLoadingFetchExtraSchedule.value = true;
     try {
       if (!internetController.isConnected.value) {
         isLoadingFetchExtraSchedule.value = false;
@@ -30,7 +31,10 @@ class ExtraAttendanceScheduleController extends GetxController {
         Map<String, dynamic> body = {'f_id': facultyId};
         final response = await http.post(
           Uri.parse(getExtraScheduleAPI),
-          headers: {'Content-Type': 'application/json'},
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': validApiKey,
+          },
           body: json.encode(body),
         );
         if (response.statusCode == 200) {
@@ -40,15 +44,15 @@ class ExtraAttendanceScheduleController extends GetxController {
               .map((scheduleData) => ExtraSchedule.fromJson(scheduleData))
               .toList();
           scheduleDataList.assignAll(extraScheduleDataList);
-
         } else {
-         Utils().showSomethingWrongAlert(context: Get.context!,onConfirm: ()=>fetchExtraSchedule());
+          Utils().showSomethingWrongAlert(
+              context: Get.context!, onConfirm: () => fetchExtraSchedule());
         }
         isLoadingFetchExtraSchedule.value = false;
       }
     } catch (e) {
-      Utils().showSomethingWrongAlert(context: Get.context!,onConfirm: ()=>fetchExtraSchedule());
+      Utils().showSomethingWrongAlert(
+          context: Get.context!, onConfirm: () => fetchExtraSchedule());
     }
   }
-
 }
