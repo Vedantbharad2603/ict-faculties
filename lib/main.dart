@@ -8,6 +8,7 @@ import 'package:ict_faculties/Binding/splash_binding.dart';
 import 'package:ict_faculties/Screens/Attendance/Extra/extra_mark_attendance.dart';
 import 'package:ict_faculties/Screens/Exception/no_schedule_available.dart';
 import 'package:ict_faculties/Screens/Exception/no_students_available.dart';
+import 'package:ict_faculties/Screens/Exception/service_not_available.dart';
 import 'package:ict_faculties/Screens/StudentEngage/add_engage_student.dart';
 import 'package:ict_faculties/Screens/Attendance/Extra/extra_attendance_schedule.dart';
 import 'package:ict_faculties/Screens/StudentEngage/engage_students_list.dart';
@@ -81,6 +82,10 @@ class MyApp extends StatelessWidget {
             name: "/test",
             transition: Transition.fadeIn,
             page: () => const NoScheduleAvailable()),
+        GetPage(
+            name: "/serverFailed",
+            transition: Transition.fadeIn,
+            page: () => const ServiceNotAvailable()),
       ],
       initialRoute: "/splashscreen",
     );

@@ -27,11 +27,13 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
+
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
+    - assets/images/AppIcon/
     - assets/images/MainIcons/
     - assets/images/Exception/
     - assets/gifs/

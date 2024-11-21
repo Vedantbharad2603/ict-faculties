@@ -384,7 +384,7 @@ class MarkExtraAttendance extends GetView<ExtraMarkAttendanceController> {
                           },
                         ) : NoStudentsAvailable()),
                     // Save button
-                    Align(
+                    controller.extraAttendanceDataCopyList.isNotEmpty?Align(
                       alignment: Alignment.centerRight,
                       child: FloatingActionButton.extended(
                         onPressed: () {
@@ -418,7 +418,7 @@ class MarkExtraAttendance extends GetView<ExtraMarkAttendanceController> {
                               fontFamily: 'mu_bold', color: Colors.white),
                         ),
                       ),
-                    )
+                    ):Container()
                   ],
                 ),
               ),

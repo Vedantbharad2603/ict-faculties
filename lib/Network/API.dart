@@ -1,5 +1,5 @@
 String Host = "https://3213-119-160-199-91.ngrok-free.app";
-String Path = "/ict-server-main/api/index.php";
+String Path = "/ict-server/api/index.php";
 
 String CurrentVersion = "1.0";
 String validApiKey = "your-secure-api-key";
