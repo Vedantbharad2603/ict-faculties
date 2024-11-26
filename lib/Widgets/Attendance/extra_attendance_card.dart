@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ict_faculties/Helper/colors.dart';
 import 'package:ict_faculties/Helper/Components.dart';
+import 'package:ict_faculties/Helper/size.dart';
 
 class ExtraScheduleCard extends StatelessWidget {
   final BuildContext context;
@@ -66,7 +67,7 @@ class ExtraScheduleCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Container(
+                            SizedBox(
                               width: getWidth(context, 0.8),
                               child: Text(
                                 subjectName,
@@ -130,31 +131,30 @@ class ExtraScheduleCard extends StatelessWidget {
                         Divider(),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                          child: Container(
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: InkWell(
-                                onTap: () => Get.toNamed("/markExtraAttendance", arguments: {
-                                  'faculty_id': facultyId,
-                                  'subject_id': subjectId,
-                                  'schedule' : arg,
-                                  'selected_date': selectedDate,
-                                }),
-                                child: Card(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: InkWell(
+                              onTap: () => Get.toNamed("/markExtraAttendance", arguments: {
+                                'faculty_id': facultyId,
+                                'subject_id': subjectId,
+                                'schedule' : arg,
+                                'selected_date': selectedDate,
+                              }),
+                              child: Container(
+                                decoration: BoxDecoration(
                                   color: muGrey,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                  child: Container(
-                                    height: getHeight(context, 0.05),
-                                    // width: getWidth(context, 0.4),
-                                    child: Center(
-                                      child: Text(
-                                        "Take Attendance",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: muColor,
-                                            fontFamily: "mu_reg",
-                                            fontSize: getSize(context, 2)),
-                                      ),
+                                  borderRadius: BorderRadius.circular(borderRad),
+                                ),
+                                child: SizedBox(
+                                  height: getHeight(context, 0.05),
+                                  child: Center(
+                                    child: Text(
+                                      "Take Attendance",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: muColor,
+                                          fontFamily: "mu_reg",
+                                          fontSize: getSize(context, 2)),
                                     ),
                                   ),
                                 ),

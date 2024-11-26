@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 
 import '../../Helper/colors.dart';
@@ -112,12 +113,12 @@ class ScheduleCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _buildIconTextRow(
-                                  Icons.alarm,
+                                  HugeIcons.strokeRoundedTime04,
                                   "${startTime.substring(0, 5)} to ${endTime.substring(0, 5)}",
                                 ),
                                 SizedBox(height: 5),
                                 _buildIconTextRow(
-                                  Icons.location_on_outlined,
+                                  HugeIcons.strokeRoundedLocation01,
                                   classLoc,
                                 ),
                               ],

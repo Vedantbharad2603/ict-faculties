@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ict_faculties/Helper/Utils.dart';
+import 'package:ict_faculties/Screens/Exception/service_not_available.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Helper/colors.dart';
 import '../Network/API.dart';
@@ -18,7 +19,8 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    checkVersion();
+    // checkVersion();
+    _navigateAfterSplash();
   }
 
   _navigateAfterSplash() async {
@@ -61,7 +63,7 @@ class SplashController extends GetxController {
               confirmButtonText: "Update Now", // Hides the confirm button
               confirmButtonColor: muColor,
               onConfirm: () async {
-                String url = 'https://devanpatel28.blogspot.com/';
+                String url = updateURL;
                 await launch(url);
               },
               title: "App update available!",
@@ -75,7 +77,7 @@ class SplashController extends GetxController {
       }
     } catch (e) {
       print('Error: $e');
-      return false;
+      ServiceNotAvailable();
     }
   }
 }

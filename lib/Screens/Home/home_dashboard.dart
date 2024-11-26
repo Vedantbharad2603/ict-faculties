@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ict_faculties/Controllers/login_controller.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Models/faculty.dart';
 import 'package:ict_faculties/Network/API.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../Helper/colors.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -26,8 +22,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     Map<String, dynamic> storedData = box.read('userdata');
-    print("from dashboard");
-    print(storedData);
     userData = Faculty.fromJson(storedData);
   }
 
@@ -54,28 +48,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await CachedNetworkImage.evictFromCache(facultyImageAPI(userData.facultyId));
-          box.write('loggedin', false);
-          box.write('userdata', null);
-          Get.offNamed('/login');
-        },
-        child: Icon(Icons.exit_to_app),
-      ),
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Dashboard",
-            style: TextStyle(
-                color: Colors.black, fontFamily: "mu_reg", fontSize: 23)),
-        centerTitle: true,
-        backgroundColor: Colors.white,
+        title: Text("Dashboard", style: TextStyle(color: Colors.black, fontFamily: "mu_reg", fontSize: 23)),
+        backgroundColor: backgroundColor,
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(  // Allows the entire screen to scroll
+      body: SingleChildScrollView( 
         child: Column(
           children: [
-            // BlackTag Widget for Faculty Information
             BlackTag(
               context,
               Dark1,
@@ -83,25 +64,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               "ID: ${userData.facultyId}  -  ${_getDesignation()}",
               CachedNetworkImage(
                 imageUrl: facultyImageAPI(userData.facultyId),
-                placeholder: (context, url) =>  Stack(
-                  children: [Icon(
-                    Icons.person,
-                    size: 50,
-                    color: Colors.black45,
-                  ),]
-                ),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.person,
-                  size: 50,
-                  color: Colors.black87,
-                ),
+                placeholder: (context, url) =>  HugeIcon(icon: HugeIcons.strokeRoundedUser, size: 30,color: Colors.black,),
+                errorWidget: (context, url, error) => HugeIcon(icon: HugeIcons.strokeRoundedUser, size: 30,color: Colors.black,),
                 fit: BoxFit.cover,
               ),
               false,
+              '/profile',
+              userData
             ),
             SizedBox(height: 20),
-
-            // Container for GridView inside SingleChildScrollView
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Container(
@@ -118,9 +89,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   childAspectRatio: 0.9,
                   padding: EdgeInsets.all(10), // Padding for the GridView
                   children: [
-                    TapIcons(context, "Attendance", 2, "attendance.png", 45, "/regAttendanceSchedule", {'faculty_id': userData.id}),
-                    TapIcons(context, "Student Engaged", 2, "attendance.png", 45, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
-                    TapIcons(context, "Extra Attendance", 2, "attendance.png", 45, "/extraAttendanceSchedule", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    TapIcons(context, "Attendance", 2,HugeIcons.strokeRoundedCalendarUpload01, 35, "/regAttendanceSchedule", {'faculty_id': userData.id}),
+                    TapIcons(context, "Student Engaged", 2,HugeIcons.strokeRoundedStudentCard, 35, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    TapIcons(context, "Extra Attendance", 2,HugeIcons.strokeRoundedGoogleSheet,35, "/extraAttendanceSchedule", {'faculty_id': userData.id,'faculty_des':userData.designation}),
                     // TapIcons(context, "TESTING", 2, "attendance.png", 45, "/test",null),
                   ],
                 ),

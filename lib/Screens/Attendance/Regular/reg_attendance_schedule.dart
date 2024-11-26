@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Animations/zoom_in_animation.dart';
 import 'package:ict_faculties/Controllers/reg_attendance_schedule_controller.dart';
 import 'package:ict_faculties/Helper/Components.dart';
@@ -22,9 +23,7 @@ class RegAttendanceSchedule extends GetView<RegAttendanceScheduleController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text("Attendance Schedule", style: AppbarStyle),
-        centerTitle: true,
-        backgroundColor: muColor,
+        title: Text("Attendance Schedule"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded, color: Light1),
           onPressed: () {
@@ -50,8 +49,8 @@ class RegAttendanceSchedule extends GetView<RegAttendanceScheduleController> {
                 padding: const EdgeInsets.only(right: 15.0),
                 child: IconButton(
                     onPressed: () => _selectDate(context),
-                    icon: Icon(
-                      Icons.calendar_month,
+                    icon: HugeIcon(
+                      icon: HugeIcons.strokeRoundedCalendar02,
                       color: muColor,
                       size: getSize(context, 3.5),
                     )),

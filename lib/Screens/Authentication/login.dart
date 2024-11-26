@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Controllers/login_controller.dart';
 import 'package:ict_faculties/Helper/colors.dart';
 import 'package:ict_faculties/Helper/images_path.dart';
+import 'package:ict_faculties/Screens/Splash/ict_logo.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,10 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image(
-                    image: AssetImage(MuLogo),
-                    height: 100,
-                  ),
+                  // Image(
+                  //   image: AssetImage(MuLogo),
+                  //   height: 100,
+                  // ),
+                  IctLogo(),
                   const SizedBox(height: 50),
                   Container(
                     height: MediaQuery.sizeOf(context).height * 0.06,
@@ -86,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         prefixIcon: Icon(
-                          Icons.person,
+                          HugeIcons.strokeRoundedId,
                           color: _enrollmentNumberFocusNode.hasFocus
                               ? Dark1
                               : Light2,
@@ -138,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         prefixIcon: Icon(
-                          Icons.lock,
+                          HugeIcons.strokeRoundedKey01,
                           color: _passwordFocusNode.hasFocus
                               ? Dark1
                               : Light2, // Change icon color

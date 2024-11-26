@@ -1,6 +1,7 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Controllers/extra_attendance_mark_controller.dart';
 import 'package:ict_faculties/Models/extra_attendance_list.dart';
 import 'package:ict_faculties/Network/API.dart';
@@ -146,9 +147,7 @@ class MarkExtraAttendance extends GetView<ExtraMarkAttendanceController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text("Mark Extra Attendance", style: AppbarStyle),
-        centerTitle: true,
-        backgroundColor: muColor,
+        title: Text("Mark Extra Attendance"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded, color: Light1),
           onPressed: () {
@@ -408,12 +407,12 @@ class MarkExtraAttendance extends GetView<ExtraMarkAttendanceController> {
                           );
                         },
                         backgroundColor: muColor,
-                        icon: Icon(
-                          Icons.save,
+                        icon: HugeIcon(
+                          icon: HugeIcons.strokeRoundedBookmark03,
                           color: Colors.white,
                         ),
                         label: Text(
-                          "Upload",
+                          "SAVE",
                           style: TextStyle(
                               fontFamily: 'mu_bold', color: Colors.white),
                         ),
@@ -422,7 +421,7 @@ class MarkExtraAttendance extends GetView<ExtraMarkAttendanceController> {
                   ],
                 ),
               ),
-              controller.isUploadingExtraAttendance.value ? LoadingScreen() : Container(),
+              controller.isUploadingExtraAttendance.value ? MuLoadingScreen() : Container(),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Controllers/reg_attendance_mark_controller.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Models/reg_attendance_list.dart';
@@ -143,9 +144,7 @@ class RegMarkAttendance extends GetView<RegMarkAttendanceController> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text("Mark Attendance", style: AppbarStyle),
-        centerTitle: true,
-        backgroundColor: muColor,
+        title: Text("Mark Attendance"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded, color: Light1),
           onPressed: () {
@@ -486,12 +485,12 @@ class RegMarkAttendance extends GetView<RegMarkAttendanceController> {
                           );
                         },
                         backgroundColor: muColor,
-                        icon: Icon(
-                          Icons.save,
+                        icon: HugeIcon(
+                        icon: HugeIcons.strokeRoundedBookmark03,
                           color: Colors.white,
                         ),
                         label: Text(
-                          "Upload",
+                          "SAVE",
                           style: TextStyle(
                               fontFamily: 'mu_bold', color: Colors.white),
                         ),
@@ -501,7 +500,7 @@ class RegMarkAttendance extends GetView<RegMarkAttendanceController> {
                 ),
               ),
               controller.isUploadingRegAttendance.value
-                  ? LoadingScreen()
+                  ? MuLoadingScreen()
                   : Container(),
             ],
           ),

@@ -13,17 +13,15 @@ class SplashScreen extends GetView<SplashController> {
       backgroundColor: backgroundColor,
       body: Column(
         children: [
-          Container(
+          SizedBox(
             height: getHeight(context, 0.9),
             width: getWidth(context, 1),
-            child: Container(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
-                  child: Image(
-                    image: AssetImage(MuLogo),
-                    height: getHeight(context, 0.13),
-                  ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 100.0),
+                child: Image(
+                  image: AssetImage(MuLogo),
+                  height: getHeight(context, 0.13),
                 ),
               ),
             ),
