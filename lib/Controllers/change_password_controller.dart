@@ -72,15 +72,15 @@ class ChangePasswordController extends GetxController {
           colorText: Colors.white,
         );
       }
-    } catch (e) {
-      Get.snackbar(
-        "Password Change Failed",
-        "Network or server error: $e",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }finally{
-      isLoadingUpdatePass.value=false;
-    }
+      } catch (e) {
+        Get.snackbar(
+          "Password Change Failed",
+          "Network or server error: $e",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }finally{
+        isLoadingUpdatePass.value=false;
+      }
   }
 }

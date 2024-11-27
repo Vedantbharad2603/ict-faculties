@@ -21,8 +21,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   Faculty userData = Get.arguments;
-  bool isLogout = true;
-
   _getDesignation() {
     if (userData.designation == 'tp') {
       return "Trainee Professor";

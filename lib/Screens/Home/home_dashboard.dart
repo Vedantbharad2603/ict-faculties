@@ -89,9 +89,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   childAspectRatio: 0.9,
                   padding: EdgeInsets.all(10), // Padding for the GridView
                   children: [
-                    TapIcons(context, "Attendance", 2,HugeIcons.strokeRoundedCalendarUpload01, 35, "/regAttendanceSchedule", {'faculty_id': userData.id}),
-                    TapIcons(context, "Student Engaged", 2,HugeIcons.strokeRoundedStudentCard, 35, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
-                    TapIcons(context, "Extra Attendance", 2,HugeIcons.strokeRoundedGoogleSheet,35, "/extraAttendanceSchedule", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    TapIcons(context, "Attendance", 2,HugeIcons.strokeRoundedCalendarUpload01, 40, "/regAttendanceSchedule", {'faculty_id': userData.id}),
+                    TapIcons(context, "Student Engaged", 2,HugeIcons.strokeRoundedStudentCard, 40, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    TapIcons(context, "Extra Attendance", 2,HugeIcons.strokeRoundedGoogleSheet,40, "/extraAttendanceSchedule", {'faculty_id': userData.id,'faculty_des':userData.designation}),
                     // TapIcons(context, "TESTING", 2, "attendance.png", 45, "/test",null),
                   ],
                 ),

@@ -1,4 +1,3 @@
-
 String MuLogo = 'assets/images/mu_logo.png';
 String MuMainBuilding = 'assets/images/mu_main_building.png';
 String AppIcon = 'assets/images/AppIcon/faculty.png';
