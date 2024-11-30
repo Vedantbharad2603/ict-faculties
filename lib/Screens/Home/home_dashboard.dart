@@ -76,24 +76,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Container(
-                height: 400,  // Adjust this height based on your needs
+                height: 400,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: GridView.count(
-                  shrinkWrap: true,  // Ensures the GridView takes only as much space as it needs
+                  shrinkWrap: true,
                   crossAxisCount: 3,
-                  mainAxisSpacing: 20,
+                  mainAxisSpacing: 5,
                   crossAxisSpacing: 10,
-                  childAspectRatio: 0.9,
-                  padding: EdgeInsets.all(10), // Padding for the GridView
+                  childAspectRatio: 0.85,
+                  padding: EdgeInsets.all(10),
                   children: [
                     TapIcons(context, "Attendance", 2,HugeIcons.strokeRoundedCalendarUpload01, 40, "/regAttendanceSchedule", {'faculty_id': userData.id}),
                     TapIcons(context, "Student Engaged", 2,HugeIcons.strokeRoundedStudentCard, 40, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
                     TapIcons(context, "Extra Attendance", 2,HugeIcons.strokeRoundedGoogleSheet,40, "/extraAttendanceSchedule", {'faculty_id': userData.id,'faculty_des':userData.designation}),
-                    // TapIcons(context, "TESTING", 2, "attendance.png", 45, "/test",null),
-                  ],
+                    ],
                 ),
               ),
             ),

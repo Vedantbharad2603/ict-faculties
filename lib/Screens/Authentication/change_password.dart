@@ -49,7 +49,7 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                               suffixIcon: InkWell(
                                   onTap: () {
                                     controller.passShow.value =
-                                        !controller.passShow.value;
+                                    !controller.passShow.value;
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 10.0),

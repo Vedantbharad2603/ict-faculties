@@ -203,24 +203,22 @@ Widget TapIcons(
             ),
           ),
         ),
-        SizedBox(height: getHeight(context, 0.005),),
+        SizedBox(height: getHeight(context, 0.01),),
         SizedBox(
             height:getHeight(context, 0.05),
             width: getWidth(context, 0.25),
-            child: Center(
-              child: Text(
-                name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontFamily: 'mu_reg',
-                  color: muColor,
-                    height: 1,
-                  fontSize: getSize(context, nameSize)
-                ),
-                // softWrap: true,
-                textAlign: TextAlign.center,
+            child: Text(
+              name,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: 'mu_reg',
+                color: muColor,
+                  height: 1,
+                fontSize: getSize(context, nameSize)
               ),
+              // softWrap: true,
+              textAlign: TextAlign.center,
             )
         )
       ],

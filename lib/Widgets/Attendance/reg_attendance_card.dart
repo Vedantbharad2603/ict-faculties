@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Helper/Components.dart';
+import 'package:ict_faculties/Helper/size.dart';
 
 import '../../Helper/colors.dart';
 
@@ -105,12 +106,11 @@ class ScheduleCard extends StatelessWidget {
                           ],
                         ),
                         Divider(),
-                        Row(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 _buildIconTextRow(
                                   HugeIcons.strokeRoundedTime04,
@@ -124,11 +124,8 @@ class ScheduleCard extends StatelessWidget {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0,10,0,25),
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: _buildAttendanceButton(),
-                              ),
+                              padding: EdgeInsets.fromLTRB(0,10,0,10),
+                              child: _buildAttendanceButton(),
                             ),
                           ],
                         ),
@@ -200,10 +197,9 @@ class ScheduleCard extends StatelessWidget {
       }),
       child: Card(
         color: muGrey,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Container(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRad)),
+        child: SizedBox(
           height: getHeight(context, 0.05),
-          width: getWidth(context, 0.4),
           child: Center(
             child: Text(
               "Take Attendance",
