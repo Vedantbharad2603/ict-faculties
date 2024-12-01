@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,11 +8,9 @@ import 'package:ict_faculties/Controllers/attendance_controller.dart';
 import 'package:ict_faculties/Controllers/student_engaged_controller.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Models/student.dart';
-import 'package:ict_faculties/Network/API.dart';
 import 'package:ict_faculties/Screens/StudentEngage/engage_students_list.dart';
 import 'package:intl/intl.dart';
 import '../../Helper/colors.dart';
-import '../../Helper/Style.dart';
 import '../../Helper/size.dart';
 import '../Loading/adaptive_loading_screen.dart';
 
@@ -27,7 +27,8 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
   bool isLoading = true;
   List<Student>? studentsDataList; // Change the type to CCStudent
   final StudentController studentController = Get.put(StudentController());
-  final AttendanceController attendanceController = Get.put(AttendanceController());
+  final AttendanceController attendanceController =
+      Get.put(AttendanceController());
   TextEditingController searchController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
@@ -59,7 +60,7 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
 
   void searchStudent() {
     setState(() {
-      foundStudent=null;
+      foundStudent = null;
     });
     String searchText = searchController.text.trim();
     if (studentsDataList != null && searchText.isNotEmpty) {
@@ -87,7 +88,6 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
           initialDate = firstDate; // Default the end date to the start date
         } catch (e) {
           // Log or handle parsing errors if needed
-          print("Invalid Start Date format: ${startDateController.text}");
         }
       }
     }
@@ -107,7 +107,7 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
               onSurface: muColor, // Text color of inactive dates
             ),
             dialogBackgroundColor:
-            Colors.white, // Background color of the date picker
+                Colors.white, // Background color of the date picker
           ),
           child: child!,
         );
@@ -122,12 +122,12 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
     }
   }
 
-
   Future<void> upsertEngaged() async {
     if (foundStudent != null && startDateController.text.isNotEmpty) {
       try {
         // Parse the start date
-        DateTime startDate = DateFormat('dd-MM-yyyy').parse(startDateController.text);
+        DateTime startDate =
+            DateFormat('dd-MM-yyyy').parse(startDateController.text);
 
         DateTime endDate = endDateController.text.isEmpty
             ? startDate
@@ -209,7 +209,6 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -277,7 +276,7 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(15,15,15,0),
+        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
         child: isLoading
             ? AdaptiveLoadingScreen()
             : Column(
@@ -315,9 +314,8 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                           ),
                         ),
                       ),
-
                       InkWell(
-                        onTap: ()=>searchStudent(),
+                        onTap: () => searchStudent(),
                         child: Container(
                           width: getWidth(context, 0.2),
                           height: getHeight(context, 0.065),
@@ -338,7 +336,7 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                       children: [
                         Divider(),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Container(
                             decoration: BoxDecoration(
                               color: muGrey,
@@ -443,7 +441,9 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                       ],
                     ),
                   Divider(),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   // Date Pickers for Start and End Date
                   Container(
                     height: getHeight(context, 0.07),
@@ -485,7 +485,9 @@ class _AddstudentengagedState extends State<Addstudentengaged> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     height: getHeight(context, 0.07),
                     width: getWidth(context, 1),

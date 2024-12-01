@@ -11,7 +11,6 @@ import 'package:ict_faculties/Screens/Loading/mu_loading_screen.dart';
 import 'package:ict_faculties/Widgets/Refresh/adaptive_refresh_indicator.dart';
 import 'package:intl/intl.dart';
 import '../../../Helper/colors.dart';
-import '../../../Helper/Style.dart';
 
 class RegMarkAttendance extends GetView<RegMarkAttendanceController> {
   const RegMarkAttendance({super.key});
@@ -287,103 +286,156 @@ class RegMarkAttendance extends GetView<RegMarkAttendanceController> {
                     ),
                     Divider(),
                     Expanded(
-                      child: controller.isLoadingFetchAttendanceList.value
-                          ? Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CircularProgressIndicator(
-                                  color: muColor,
-                                  strokeWidth: 3,
-                                ),
-                              ),
-                            )
-                          : controller.attendanceDataCopyList.isNotEmpty
-                              ? GridView.builder(
-                                  shrinkWrap: true,
-                                  itemCount:
-                                      controller.attendanceDataCopyList.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, // 2 items per row
-                                    crossAxisSpacing:
-                                        10.0, // spacing between items horizontally
-                                    mainAxisSpacing:
-                                        5.0, // spacing between items vertically
-                                    childAspectRatio:
-                                        3, // controls the size of each tile, adjust this for the desired look
+                        child: controller.isLoadingFetchAttendanceList.value
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(
+                                    color: muColor,
+                                    strokeWidth: 3,
                                   ),
-                                  itemBuilder: (context, index) {
-                                    bool isDisabled = controller
-                                                .attendanceDataCopyList[index]
-                                                .status ==
-                                            'oe' ||
-                                        controller.attendanceDataCopyList[index]
-                                                .status ==
-                                            'gl';
-
-                                    return InkWell(
-                                      onLongPress: () => showStudentDetails(
-                                          controller
-                                              .attendanceDataCopyList[index]),
-                                      onTap: isDisabled
-                                          ? null
-                                          : () {
-                                              controller
+                                ),
+                              )
+                            : controller.attendanceDataCopyList.isNotEmpty
+                                ? GridView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: controller
+                                        .attendanceDataCopyList.length,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2, // 2 items per row
+                                      crossAxisSpacing:
+                                          10.0, // spacing between items horizontally
+                                      mainAxisSpacing:
+                                          5.0, // spacing between items vertically
+                                      childAspectRatio:
+                                          3, // controls the size of each tile, adjust this for the desired look
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      bool isDisabled = controller
                                                   .attendanceDataCopyList[index]
-                                                  .status = controller
-                                                          .attendanceDataCopyList[
-                                                              index]
-                                                          .status ==
-                                                      'pr'
-                                                  ? 'ab'
-                                                  : 'pr';
-                                              controller.attendanceDataCopyList
-                                                  .refresh();
-                                              controller.isSelectAll.value =
-                                                  controller
-                                                      .checkIfAllSelected();
-                                            },
-                                      highlightColor: Colors.transparent,
-                                      splashColor: Colors.transparent,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5.0),
-                                        child: Container(
-                                          height: getHeight(Get.context!, 0.05),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                              width: 2,
-                                              color: isDisabled
-                                                  ? Colors.green
-                                                  : controller
-                                                              .attendanceDataCopyList[
-                                                                  index]
-                                                              .status ==
-                                                          "pr"
-                                                      ? muColor
-                                                      : Colors.red,
+                                                  .status ==
+                                              'oe' ||
+                                          controller
+                                                  .attendanceDataCopyList[index]
+                                                  .status ==
+                                              'gl';
+
+                                      return InkWell(
+                                        onLongPress: () => showStudentDetails(
+                                            controller
+                                                .attendanceDataCopyList[index]),
+                                        onTap: isDisabled
+                                            ? null
+                                            : () {
+                                                controller
+                                                    .attendanceDataCopyList[
+                                                        index]
+                                                    .status = controller
+                                                            .attendanceDataCopyList[
+                                                                index]
+                                                            .status ==
+                                                        'pr'
+                                                    ? 'ab'
+                                                    : 'pr';
+                                                controller
+                                                    .attendanceDataCopyList
+                                                    .refresh();
+                                                controller.isSelectAll.value =
+                                                    controller
+                                                        .checkIfAllSelected();
+                                              },
+                                        highlightColor: Colors.transparent,
+                                        splashColor: Colors.transparent,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5.0),
+                                          child: Container(
+                                            height:
+                                                getHeight(Get.context!, 0.05),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                width: 2,
+                                                color: isDisabled
+                                                    ? Colors.green
+                                                    : controller
+                                                                .attendanceDataCopyList[
+                                                                    index]
+                                                                .status ==
+                                                            "pr"
+                                                        ? muColor
+                                                        : Colors.red,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(500.0),
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(500.0),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 8.0),
-                                                child: Text(
-                                                  controller
-                                                      .attendanceDataCopyList[
-                                                          index]
-                                                      .enrollment!,
-                                                  style: TextStyle(
-                                                    fontFamily: 'mu_reg',
-                                                    fontSize: getSize(
-                                                        Get.context!, 2.3),
-                                                    color: isDisabled
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0),
+                                                  child: Text(
+                                                    controller
+                                                        .attendanceDataCopyList[
+                                                            index]
+                                                        .enrollment!,
+                                                    style: TextStyle(
+                                                      fontFamily: 'mu_reg',
+                                                      fontSize: getSize(
+                                                          Get.context!, 2.3),
+                                                      color: isDisabled
+                                                          ? Colors.green
+                                                          : controller
+                                                                      .attendanceDataCopyList[
+                                                                          index]
+                                                                      .status ==
+                                                                  "pr"
+                                                              ? muColor
+                                                              : Colors.red,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Transform.scale(
+                                                  scale: 1.2,
+                                                  child: Checkbox(
+                                                    value: controller
+                                                            .attendanceDataCopyList[
+                                                                index]
+                                                            .status ==
+                                                        'pr',
+                                                    onChanged: isDisabled
+                                                        ? null
+                                                        : (value) {
+                                                            controller
+                                                                    .attendanceDataCopyList[
+                                                                        index]
+                                                                    .status =
+                                                                value!
+                                                                    ? 'pr'
+                                                                    : 'ab';
+                                                            controller
+                                                                .attendanceDataCopyList
+                                                                .refresh();
+                                                            controller
+                                                                    .isSelectAll
+                                                                    .value =
+                                                                controller
+                                                                    .checkIfAllSelected();
+                                                          },
+                                                    checkColor: Colors.white,
+                                                    shape: CircleBorder(),
+                                                    side: BorderSide(
+                                                      color: isDisabled
+                                                          ? Colors.green
+                                                          : Colors.red,
+                                                      width: 2,
+                                                    ),
+                                                    activeColor: isDisabled
                                                         ? Colors.green
                                                         : controller
                                                                     .attendanceDataCopyList[
@@ -392,73 +444,26 @@ class RegMarkAttendance extends GetView<RegMarkAttendanceController> {
                                                                 "pr"
                                                             ? muColor
                                                             : Colors.red,
+                                                    fillColor: isDisabled
+                                                        ? WidgetStateProperty
+                                                            .resolveWith<Color>(
+                                                            (Set<WidgetState>
+                                                                states) {
+                                                              return Colors
+                                                                  .green; // Disabled state color
+                                                            },
+                                                          )
+                                                        : null,
                                                   ),
-                                                ),
-                                              ),
-                                              Transform.scale(
-                                                scale: 1.2,
-                                                child: Checkbox(
-                                                  value: controller
-                                                          .attendanceDataCopyList[
-                                                              index]
-                                                          .status ==
-                                                      'pr',
-                                                  onChanged: isDisabled
-                                                      ? null
-                                                      : (value) {
-                                                          controller
-                                                                  .attendanceDataCopyList[
-                                                                      index]
-                                                                  .status =
-                                                              value!
-                                                                  ? 'pr'
-                                                                  : 'ab';
-                                                          controller
-                                                              .attendanceDataCopyList
-                                                              .refresh();
-                                                          controller.isSelectAll
-                                                                  .value =
-                                                              controller
-                                                                  .checkIfAllSelected();
-                                                        },
-                                                  checkColor: Colors.white,
-                                                  shape: CircleBorder(),
-                                                  side: BorderSide(
-                                                    color: isDisabled
-                                                        ? Colors.green
-                                                        : Colors.red,
-                                                    width: 2,
-                                                  ),
-                                                  activeColor: isDisabled
-                                                      ? Colors.green
-                                                      : controller
-                                                                  .attendanceDataCopyList[
-                                                                      index]
-                                                                  .status ==
-                                                              "pr"
-                                                          ? muColor
-                                                          : Colors.red,
-                                                  fillColor: isDisabled
-                                                      ? WidgetStateProperty
-                                                          .resolveWith<Color>(
-                                                          (Set<WidgetState>
-                                                              states) {
-                                                            return Colors
-                                                                .green; // Disabled state color
-                                                          },
-                                                        )
-                                                      : null,
-                                                ),
-                                              )
-                                            ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                )
-                              : NoStudentsAvailable()
-                    ),
+                                      );
+                                    },
+                                  )
+                                : NoStudentsAvailable()),
                     // Save button
                     Align(
                       alignment: Alignment.centerRight,
@@ -486,7 +491,7 @@ class RegMarkAttendance extends GetView<RegMarkAttendanceController> {
                         },
                         backgroundColor: muColor,
                         icon: HugeIcon(
-                        icon: HugeIcons.strokeRoundedBookmark03,
+                          icon: HugeIcons.strokeRoundedBookmark03,
                           color: Colors.white,
                         ),
                         label: Text(

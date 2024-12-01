@@ -19,7 +19,8 @@ class ExtraScheduleCard extends StatelessWidget {
   final DateTime selectedDate;
   final dynamic arg;
 
-  ExtraScheduleCard({
+  const ExtraScheduleCard({
+    super.key,
     required this.context,
     required this.facultyId,
     required this.semId,
@@ -47,7 +48,7 @@ class ExtraScheduleCard extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                   color: backgroundColor,
-                  border: Border.all(color: muGrey,width: 1.5),
+                  border: Border.all(color: muGrey, width: 1.5),
                   borderRadius: BorderRadius.circular(getSize(context, 2.5)),
                   boxShadow: [
                     BoxShadow(
@@ -134,16 +135,18 @@ class ExtraScheduleCard extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.bottomCenter,
                             child: InkWell(
-                              onTap: () => Get.toNamed("/markExtraAttendance", arguments: {
-                                'faculty_id': facultyId,
-                                'subject_id': subjectId,
-                                'schedule' : arg,
-                                'selected_date': selectedDate,
-                              }),
+                              onTap: () => Get.toNamed("/markExtraAttendance",
+                                  arguments: {
+                                    'faculty_id': facultyId,
+                                    'subject_id': subjectId,
+                                    'schedule': arg,
+                                    'selected_date': selectedDate,
+                                  }),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: muGrey,
-                                  borderRadius: BorderRadius.circular(borderRad),
+                                  borderRadius:
+                                      BorderRadius.circular(borderRad),
                                 ),
                                 child: SizedBox(
                                   height: getHeight(context, 0.05),
@@ -204,5 +207,4 @@ class ExtraScheduleCard extends StatelessWidget {
       ),
     );
   }
-
 }

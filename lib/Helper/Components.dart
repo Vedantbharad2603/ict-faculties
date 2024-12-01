@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Helper/colors.dart';
@@ -35,11 +33,11 @@ Widget horizontalLine() {
 }
 
 Widget BlackTag(context, Color? color, String? Line1, String? Line2,
-    Widget? imageWidget, bool isReverse,String onTapPath,arg) {
+    Widget? imageWidget, bool isReverse, String onTapPath, arg) {
   return Container(
     alignment: Alignment.centerRight,
     child: InkWell(
-      onTap: ()=>Get.toNamed(onTapPath,arguments: arg),
+      onTap: () => Get.toNamed(onTapPath, arguments: arg),
       child: Row(
         mainAxisAlignment:
             MainAxisAlignment.spaceBetween, // Conditional alignment
@@ -152,7 +150,7 @@ Widget BlackTag(context, Color? color, String? Line1, String? Line2,
                           decoration: BoxDecoration(
                               color: muGrey2,
                               borderRadius:
-                              BorderRadius.all(Radius.circular(500))),
+                                  BorderRadius.all(Radius.circular(500))),
                           child: imageWidget,
                         ),
                       ),
@@ -203,24 +201,24 @@ Widget TapIcons(
             ),
           ),
         ),
-        SizedBox(height: getHeight(context, 0.01),),
         SizedBox(
-            height:getHeight(context, 0.05),
+          height: getHeight(context, 0.01),
+        ),
+        SizedBox(
+            height: getHeight(context, 0.05),
             width: getWidth(context, 0.25),
             child: Text(
               name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontFamily: 'mu_reg',
-                color: muColor,
+                  fontFamily: 'mu_reg',
+                  color: muColor,
                   height: 1,
-                fontSize: getSize(context, nameSize)
-              ),
+                  fontSize: getSize(context, nameSize)),
               // softWrap: true,
               textAlign: TextAlign.center,
-            )
-        )
+            ))
       ],
     ),
   );

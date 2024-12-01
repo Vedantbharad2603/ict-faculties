@@ -9,7 +9,6 @@ import 'package:ict_faculties/Screens/Loading/adaptive_loading_screen.dart';
 import 'package:ict_faculties/Widgets/Refresh/adaptive_refresh_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:ict_faculties/Helper/colors.dart';
-import 'package:ict_faculties/Helper/Style.dart';
 import 'package:ict_faculties/Widgets/Attendance/reg_attendance_card.dart';
 
 import '../../Exception/no_schedule_available.dart';
@@ -37,14 +36,20 @@ class RegAttendanceSchedule extends GetView<RegAttendanceScheduleController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-             Obx(()=> Heading1(
-               context,
-               DateTime.now().difference(controller.selectedDate.value).inDays == 0
-                   ? "Today (${DateFormat('dd-MMM-yyyy').format(controller.selectedDate.value)})"
-                   : DateFormat('dd-MMM-yyyy').format(controller.selectedDate.value),
-               2.5,
-               15,
-             ),),
+              Obx(
+                () => Heading1(
+                  context,
+                  DateTime.now()
+                              .difference(controller.selectedDate.value)
+                              .inDays ==
+                          0
+                      ? "Today (${DateFormat('dd-MMM-yyyy').format(controller.selectedDate.value)})"
+                      : DateFormat('dd-MMM-yyyy')
+                          .format(controller.selectedDate.value),
+                  2.5,
+                  15,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0),
                 child: IconButton(
@@ -64,8 +69,8 @@ class RegAttendanceSchedule extends GetView<RegAttendanceScheduleController> {
           Obx(
             () => Expanded(
               child: AdaptiveRefreshIndicator(
-                onRefresh: () =>
-                    controller.fetchSchedule(date: controller.selectedDate.value),
+                onRefresh: () => controller.fetchSchedule(
+                    date: controller.selectedDate.value),
                 child: controller.isLoadingFetchSchedule.value
                     ? AdaptiveLoadingScreen()
                     : controller.scheduleDataList.isNotEmpty

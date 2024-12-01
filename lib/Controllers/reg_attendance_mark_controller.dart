@@ -58,7 +58,6 @@ class RegMarkAttendanceController extends GetxController {
         return [];
       }
     } catch (e) {
-      print('Error: $e');
       return [];
     }
   }
@@ -67,7 +66,6 @@ class RegMarkAttendanceController extends GetxController {
     isLoadingFetchAttendanceList.value = true;
     await internetController.checkConnection();
     if (!internetController.isConnected.value) {
-      print("No Internet");
       isLoadingFetchAttendanceList.value = false;
       Utils().showInternetAlert(
           context: Get.context!, onConfirm: () => fetchAttendanceList());
@@ -118,7 +116,6 @@ class RegMarkAttendanceController extends GetxController {
             context: Get.context!, onConfirm: () => uploadRegAttendance());
       } else {
         if (uploadAttendanceDataList.isEmpty) {
-          print('No attendance data available to upload');
           Utils().showNoChangesUploadAlert();
         }
         List<Map<String, dynamic>> body =

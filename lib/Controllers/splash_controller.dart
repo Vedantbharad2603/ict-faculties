@@ -37,7 +37,6 @@ class SplashController extends GetxController {
     try {
       await controller.checkConnection();
       if (!controller.isConnected.value) {
-        print("No Internet");
         Utils()
             .showInternetAlert(context: Get.context!, onConfirm: checkVersion);
       } else {
@@ -76,7 +75,6 @@ class SplashController extends GetxController {
         }
       }
     } catch (e) {
-      print('Error: $e');
       ServiceNotAvailable();
     }
   }

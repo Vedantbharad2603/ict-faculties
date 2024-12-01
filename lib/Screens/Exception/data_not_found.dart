@@ -16,7 +16,8 @@ class DataNotFound extends StatelessWidget {
             color: backgroundColor,
             child: SizedBox(
               height: getHeight(context, 0.7),
-              child: Expanded(child: SizedBox(
+              child: Expanded(
+                  child: SizedBox(
                 height: getHeight(context, 1),
                 width: getWidth(context, 1),
                 child: Align(
@@ -53,4 +54,3 @@ class DataNotFound extends StatelessWidget {
         ]);
   }
 }
-

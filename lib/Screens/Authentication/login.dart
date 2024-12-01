@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Controllers/login_controller.dart';
 import 'package:ict_faculties/Helper/colors.dart';
-import 'package:ict_faculties/Helper/images_path.dart';
 import 'package:ict_faculties/Screens/Splash/ict_logo.dart';
 
 import '../../Helper/Components.dart';
@@ -77,11 +76,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 icon: HugeIcons.strokeRoundedUserAccount,
                                 color: Colors.grey),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: muGrey2, width: 1.5),
+                              borderSide:
+                                  BorderSide(color: muGrey2, width: 1.5),
                               borderRadius: BorderRadius.circular(borderRad),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: muGrey2, width: 1.5),
+                              borderSide:
+                                  BorderSide(color: muGrey2, width: 1.5),
                               borderRadius: BorderRadius.circular(borderRad),
                             ),
                           ),
@@ -101,13 +102,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               HugeIcons.strokeRoundedKey01,
                               color: Colors.grey, // Change icon color
                             ),
-
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: muGrey2, width: 1.5),
+                              borderSide:
+                                  BorderSide(color: muGrey2, width: 1.5),
                               borderRadius: BorderRadius.circular(borderRad),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: muGrey2, width: 1.5),
+                              borderSide:
+                                  BorderSide(color: muGrey2, width: 1.5),
                               borderRadius: BorderRadius.circular(borderRad),
                             ),
                             suffixIcon: InkWell(
@@ -124,7 +126,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                           : HugeIcons.strokeRoundedViewOff,
                                       color: Colors.grey),
                                 )),
-
                           ),
                           style: TextStyle(
                             fontSize: getSize(context, 2.5),
@@ -136,7 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 () {}); // To trigger rebuild and change icon color on tap
                           },
                         ),
-
                         SizedBox(height: 20),
                         InkWell(
                             onTap: () => Get.toNamed("forgotPass"),
@@ -152,8 +152,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 username.text, password.text)) {
                               Get.offAllNamed("/dashboard");
                             } else {
-                              Get.snackbar(
-                                  "Login Failed", "Email or Password is invalid",
+                              Get.snackbar("Login Failed",
+                                  "Email or Password is invalid",
                                   backgroundColor: Colors.red,
                                   colorText: Colors.white);
                             }

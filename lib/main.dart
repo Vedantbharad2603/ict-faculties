@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:ict_faculties/Binding/extra_mark_attendance_binding.dart';
 import 'package:ict_faculties/Binding/reg_attendance_schedule_binding.dart';
 import 'package:ict_faculties/Binding/reg_mark_attendance_binding.dart';
@@ -36,8 +35,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-
-  MyApp({super.key});
+  const MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -48,7 +46,8 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           backgroundColor: muColor,
           centerTitle: true,
-          titleTextStyle: TextStyle(fontFamily: "mu_reg",color: backgroundColor,fontSize: 20),
+          titleTextStyle: TextStyle(
+              fontFamily: "mu_reg", color: backgroundColor, fontSize: 20),
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -82,8 +81,7 @@ class MyApp extends StatelessWidget {
             name: "/regAttendanceSchedule",
             transition: Transition.fadeIn,
             binding: RegAttendanceScheduleBinding(),
-            page: () => const RegAttendanceSchedule()
-        ),
+            page: () => const RegAttendanceSchedule()),
         GetPage(
             name: "/markARegAttendance",
             transition: Transition.fadeIn,

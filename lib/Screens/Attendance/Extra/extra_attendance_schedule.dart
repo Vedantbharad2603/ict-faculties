@@ -11,7 +11,6 @@ import 'package:ict_faculties/Widgets/Attendance/extra_attendance_card.dart';
 import 'package:ict_faculties/Widgets/Refresh/adaptive_refresh_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:ict_faculties/Helper/colors.dart';
-import 'package:ict_faculties/Helper/Style.dart';
 
 import '../../Exception/no_schedule_available.dart';
 

@@ -3,10 +3,9 @@ import 'package:ict_faculties/Controllers/reg_attendance_schedule_controller.dar
 
 import '../Controllers/internet_connectivity.dart';
 
-class RegAttendanceScheduleBinding extends Bindings{
+class RegAttendanceScheduleBinding extends Bindings {
   @override
   void dependencies() {
-    // TODO: implement dependencies
     Get.put(InternetConnectivityController());
     Get.put(RegAttendanceScheduleController());
   }

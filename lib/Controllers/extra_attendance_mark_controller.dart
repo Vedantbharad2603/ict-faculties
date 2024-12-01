@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +39,6 @@ class ExtraMarkAttendanceController extends GetxController {
     isLoadingExtraAttendanceList.value = true;
     await internetController.checkConnection();
     if (!internetController.isConnected.value) {
-      print("No Internet");
       isLoadingExtraAttendanceList.value = false;
       Utils().showInternetAlert(
           context: Get.context!, onConfirm: () => fetchExtraAttendanceList());
@@ -72,7 +73,6 @@ class ExtraMarkAttendanceController extends GetxController {
       );
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
-        print(responseData);
         List<ExtraAttendanceList> ExtraAttendanceDataList = responseData
             .map((attendanceData) =>
                 ExtraAttendanceList.fromJson(attendanceData))
@@ -124,8 +124,6 @@ class ExtraMarkAttendanceController extends GetxController {
       }
       List<Map<String, dynamic>> body =
           uploadExtraAttendanceDataList.map((data) => data.toJson()).toList();
-      print("----------------------------------------------\n Sending data: ");
-      print(json.encode(body));
       final response = await http.post(
         Uri.parse(uploadExtraAttendanceAPI),
         headers: {

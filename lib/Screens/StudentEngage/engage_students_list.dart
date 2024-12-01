@@ -3,10 +3,8 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Controllers/student_engaged_controller.dart';
 import 'package:ict_faculties/Helper/colors.dart';
-import 'package:ict_faculties/Helper/Style.dart';
 import 'package:ict_faculties/Models/engage_student.dart';
 import 'package:ict_faculties/Screens/Exception/data_not_found.dart';
-import 'package:ict_faculties/Screens/Exception/no_students_available.dart';
 import 'package:ict_faculties/Screens/Loading/adaptive_loading_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -90,32 +88,37 @@ class _EngagedStudentScreenState extends State<EngagedStudentScreen>
 
   List<EngagedStudent> filterStudents(String filter) {
     DateTime today = DateTime.now();
-    DateTime currentDate = DateTime(today.year, today.month, today.day); // Strip the time part
+    DateTime currentDate =
+        DateTime(today.year, today.month, today.day); // Strip the time part
 
     if (filter == "ALL") {
       return List.from(filteredStudentsDataList ?? []);
     } else if (filter == "CURRENT") {
       return filteredStudentsDataList?.where((student) {
-        DateTime endDate = DateTime(
-          student.endDate!.year,
-          student.endDate!.month,
-          student.endDate!.day,
-        );
-        return endDate.isAfter(currentDate) || endDate.isAtSameMomentAs(currentDate);
-      }).toList() ?? [];
+            DateTime endDate = DateTime(
+              student.endDate!.year,
+              student.endDate!.month,
+              student.endDate!.day,
+            );
+            return endDate.isAfter(currentDate) ||
+                endDate.isAtSameMomentAs(currentDate);
+          }).toList() ??
+          [];
     } else if (filter == "PAST") {
       return filteredStudentsDataList?.where((student) {
-        DateTime endDate = DateTime(
-          student.endDate!.year,
-          student.endDate!.month,
-          student.endDate!.day,
-        );
-        return endDate.isBefore(currentDate);
-      }).toList() ?? [];
+            DateTime endDate = DateTime(
+              student.endDate!.year,
+              student.endDate!.month,
+              student.endDate!.day,
+            );
+            return endDate.isBefore(currentDate);
+          }).toList() ??
+          [];
     } else if (filter == "BY ME") {
       return filteredStudentsDataList?.where((student) {
-        return student.facultyInfoId == facId;
-      }).toList() ?? [];
+            return student.facultyInfoId == facId;
+          }).toList() ??
+          [];
     }
     return [];
   }
@@ -189,12 +192,16 @@ class _EngagedStudentScreenState extends State<EngagedStudentScreen>
                             ),
                             suffixIcon: searchController.text.isNotEmpty
                                 ? IconButton(
-                              icon: HugeIcon(icon: HugeIcons.strokeRoundedSearchRemove, color: muColor),
-                              onPressed: () {
-                                searchController.clear();
-                                filterStudentsBySearch(''); // Reset search results
-                              },
-                            )
+                                    icon: HugeIcon(
+                                        icon:
+                                            HugeIcons.strokeRoundedSearchRemove,
+                                        color: muColor),
+                                    onPressed: () {
+                                      searchController.clear();
+                                      filterStudentsBySearch(
+                                          ''); // Reset search results
+                                    },
+                                  )
                                 : null,
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: muGrey2),
@@ -215,7 +222,9 @@ class _EngagedStudentScreenState extends State<EngagedStudentScreen>
                       SizedBox(width: 8),
                       IconButton(
                         icon: HugeIcon(
-                          icon:isAscending ? HugeIcons.strokeRoundedSortByUp01 : HugeIcons.strokeRoundedSortByDown01,
+                          icon: isAscending
+                              ? HugeIcons.strokeRoundedSortByUp01
+                              : HugeIcons.strokeRoundedSortByDown01,
                           color: muColor,
                         ),
                         onPressed: sortStudents,

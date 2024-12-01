@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:ict_faculties/Controllers/change_password_controller.dart';
 import '../Controllers/internet_connectivity.dart';
-class ChangePasswordBinding extends Bindings{
+
+class ChangePasswordBinding extends Bindings {
   @override
   void dependencies() {
-    // TODO: implement dependencies
     Get.put(InternetConnectivityController());
     Get.put(ChangePasswordController());
   }

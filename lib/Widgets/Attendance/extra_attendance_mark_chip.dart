@@ -24,7 +24,8 @@ class ExtAttendanceMarkChip extends StatelessWidget {
   final DateTime selectedDate;
   final dynamic arg;
 
-  const ExtAttendanceMarkChip({super.key,
+  const ExtAttendanceMarkChip({
+    super.key,
     required this.context,
     required this.facultyId,
     required this.sem,
@@ -122,7 +123,7 @@ class ExtAttendanceMarkChip extends StatelessWidget {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(7,10,0,25),
+                              padding: EdgeInsets.fromLTRB(7, 10, 0, 25),
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: _buildAttendanceButton(),
@@ -199,7 +200,7 @@ class ExtAttendanceMarkChip extends StatelessWidget {
       child: Card(
         color: muGrey,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Container(
+        child: SizedBox(
           height: getHeight(context, 0.05),
           width: getWidth(context, 0.4),
           child: Center(

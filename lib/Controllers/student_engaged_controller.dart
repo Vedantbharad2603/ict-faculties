@@ -21,7 +21,6 @@ class StudentController extends GetxController {
         body: json.encode(body),
       );
 
-      print(response.body);
       if (response.statusCode == 200) {
         // Decode response body as List<dynamic>
         List<dynamic> responseData = json.decode(response.body);
@@ -29,13 +28,11 @@ class StudentController extends GetxController {
         // Map to List<EngagedStudent> using fromJson
         List<Student> studentDataList =
             responseData.map((json) => Student.fromJson(json)).toList();
-        print(studentDataList);
         return studentDataList;
       } else {
         return null;
       }
     } catch (e) {
-      print('Error: $e');
       return null;
     }
   }
@@ -55,7 +52,6 @@ class StudentController extends GetxController {
         body: json.encode(body),
       );
 
-      print(response.body);
       if (response.statusCode == 200) {
         // Decode response body as List<dynamic>
         List<dynamic> responseData = json.decode(response.body);
@@ -63,13 +59,11 @@ class StudentController extends GetxController {
         // Map to List<EngagedStudent> using fromJson
         List<EngagedStudent> engagedStudentDataList =
             responseData.map((json) => EngagedStudent.fromJson(json)).toList();
-        print(engagedStudentDataList);
         return engagedStudentDataList;
       } else {
         return null;
       }
     } catch (e) {
-      print('Error: $e');
       return null;
     }
   }

@@ -5,8 +5,11 @@ import 'package:ict_faculties/Helper/Colors.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Helper/images_path.dart';
 import 'package:ict_faculties/Network/API.dart';
+
 class SplashScreen extends GetView<SplashController> {
-   // GetStorage instance
+  const SplashScreen({super.key});
+
+  // GetStorage instance
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +31,11 @@ class SplashScreen extends GetView<SplashController> {
           ),
           Expanded(
             child: Center(
-              child:Text("Version $CurrentVersion",style: TextStyle(fontSize: getSize(context, 2),fontFamily: "mu_reg"),),
+              child: Text(
+                "Version $CurrentVersion",
+                style: TextStyle(
+                    fontSize: getSize(context, 2), fontFamily: "mu_reg"),
+              ),
             ),
           )
         ],

@@ -5,12 +5,13 @@ class ZoomInAnimation extends StatefulWidget {
   final int delayMilliseconds;
 
   const ZoomInAnimation({
-    Key? key,
+    super.key,
     required this.child,
     this.delayMilliseconds = 200, // Customize delay for each item if needed
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _ZoomInAnimationState createState() => _ZoomInAnimationState();
 }
 

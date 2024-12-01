@@ -26,7 +26,6 @@ class RegAttendanceScheduleController extends GetxController {
     scheduleDataList.value = [];
     await internetController.checkConnection();
     if (!internetController.isConnected.value) {
-      print("No Internet");
       isLoadingFetchSchedule.value = false;
       Utils().showInternetAlert(
           context: Get.context!,
@@ -67,7 +66,6 @@ class RegAttendanceScheduleController extends GetxController {
         return null;
       }
     } catch (e) {
-      print('Error: $e');
       return null;
     }
   }
