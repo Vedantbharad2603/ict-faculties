@@ -11,7 +11,7 @@ class Faculty {
   String? profilePic;
   DateTime? birthDate;
   String? designation;
-  DateTime? joiningDate;
+  String joiningDate;
 
   Faculty({
     this.email,
@@ -26,7 +26,7 @@ class Faculty {
     this.profilePic,
     this.birthDate,
     this.designation,
-    this.joiningDate,
+    required this.joiningDate,
   });
 
   // Factory method to create a User instance from a JSON map
@@ -44,7 +44,7 @@ class Faculty {
       profilePic: json['profile_pic']?.toString(),
       birthDate: DateTime.tryParse(json['birth_date']!=null?json['birth_date'].toString():''),
       designation: json['designation']?.toString(),
-      joiningDate: DateTime.tryParse(json['joining_date']!=null?json['joining_date'].toString():''),
+      joiningDate: json['joining_date']??"",
     );
   }
 
@@ -63,7 +63,7 @@ class Faculty {
       'profile_pic': profilePic,
       'birth_date': birthDate?.toIso8601String(),
       'designation': designation,
-      'joining_date': joiningDate?.toIso8601String(),
+      'joining_date': joiningDate,
     };
   }
 }

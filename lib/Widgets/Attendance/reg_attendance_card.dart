@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Helper/Components.dart';
 import 'package:ict_faculties/Helper/size.dart';
@@ -46,9 +47,10 @@ class ScheduleCard extends StatelessWidget {
     required this.selectedDate,
     required this.arg,
   });
-
   @override
   Widget build(BuildContext context) {
+    String formattedStartTime = DateFormat('hh:mm a').format(DateFormat("yyyy-MM-dd HH:mm:ss").parse("2000-01-01 $startTime"));
+    String formattedEndTime = DateFormat('hh:mm a').format(DateFormat("yyyy-MM-dd HH:mm:ss").parse("2000-01-01 $endTime"));
     return Padding(
       padding: EdgeInsets.all(getSize(context, 1.5)),
       child: Stack(
@@ -59,15 +61,9 @@ class ScheduleCard extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: backgroundColor,
-                border: Border.all(color: muGrey,width: 1.5),
+                border: Border.all(color: muGrey2,width: 1.5),
                 borderRadius: BorderRadius.circular(getSize(context, 2.5)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    spreadRadius: 0,
-                    blurRadius: 5,
-                  ),
-                ],
+
               ),
               child: Column(
                 children: [
@@ -97,7 +93,7 @@ class ScheduleCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Divider(),
+                        Divider(color: muGrey2,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -105,7 +101,7 @@ class ScheduleCard extends StatelessWidget {
                             _buildInfoRow("Batch", batch.toUpperCase()),
                           ],
                         ),
-                        Divider(),
+                        Divider(color: muGrey2,),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -114,7 +110,7 @@ class ScheduleCard extends StatelessWidget {
                               children: [
                                 _buildIconTextRow(
                                   HugeIcons.strokeRoundedTime04,
-                                  "${startTime.substring(0, 5)} to ${endTime.substring(0, 5)}",
+                                  "$formattedStartTime to $formattedEndTime",
                                 ),
                                 SizedBox(height: 5),
                                 _buildIconTextRow(

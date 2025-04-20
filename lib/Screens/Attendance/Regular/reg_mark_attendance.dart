@@ -322,6 +322,7 @@ class RegMarkAttendance extends GetView<RegMarkAttendanceController> {
                                               'gl';
 
                                       return InkWell(
+                                        onHover: (value) => Tooltip(message: controller.attendanceDataCopyList[index].studentName!,),
                                         onLongPress: () => showStudentDetails(
                                             controller
                                                 .attendanceDataCopyList[index]),

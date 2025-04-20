@@ -1,30 +1,38 @@
-String Host =
-    "https://d6bf-2409-40c1-3014-f0c6-a50e-deb2-1d74-4126.ngrok-free.app";
+String host = "https://trivially-active-bream.ngrok-free.app";
 String serverPath = "/ict-server/api/index.php";
 
 String CurrentVersion = "1.0";
-String validApiKey = "your-secure-api-key";
+String validApiKey = "ictmu";
 String updateURL = 'https://devanpatel28.blogspot.com/';
 
-String validateLoginAPI = '$Host$serverPath/Faculty/login';
+String validateLoginAPI = '$host$serverPath/Faculty/login';
 
-String validateVersionAPI = '$Host$serverPath/AppVersion/check';
+String validateVersionAPI = '$host$serverPath/AppVersion/check';
 
-String updatePasswordAPI = '$Host$serverPath/Password/updatePassword';
+String updatePasswordAPI = '$host$serverPath/Password/updatePassword';
 
-String getScheduleAPI = '$Host$serverPath/Attendance/GetFacultySchedule';
-String getAttendanceListAPI = '$Host$serverPath/Attendance/GetAttendanceList';
-String uploadAttendanceAPI = '$Host$serverPath/Attendance/UploadAttendance';
-String getStudentByCCAPI = '$Host$serverPath/Attendance/GetStudentsByCC';
-String getEngagedStudentByCCAPI =
-    '$Host$serverPath/Attendance/GetEngagedStudentsByCC';
-String upsertEngagedStudentAPI =
-    '$Host$serverPath/Attendance/UpsertEngagedStudent';
-String getExtraScheduleAPI = '$Host$serverPath/Attendance/GetExtraSchedule';
-String getExtraAttendanceListAPI =
-    '$Host$serverPath/Attendance/GetExtraAttendanceList';
-String uploadExtraAttendanceAPI =
-    '$Host$serverPath/Attendance/UploadExtraAttendance';
+String getScheduleAPI = '$host$serverPath/Attendance/GetFacultySchedule';
+String getAttendanceListAPI = '$host$serverPath/Attendance/GetAttendanceList';
+String uploadAttendanceAPI = '$host$serverPath/Attendance/UploadAttendance';
+String getStudentByCCAPI = '$host$serverPath/Attendance/GetStudentsByCC';
+String getEngagedStudentByCCAPI ='$host$serverPath/Attendance/GetEngagedStudentsByCC';
+String upsertEngagedStudentAPI = '$host$serverPath/Attendance/UpsertEngagedStudent';
+String getExtraScheduleAPI = '$host$serverPath/Attendance/GetExtraSchedule';
+String getExtraAttendanceListAPI = '$host$serverPath/Attendance/GetExtraAttendanceList';
+String uploadExtraAttendanceAPI = '$host$serverPath/Attendance/UploadExtraAttendance';
+
+String facultyPunch = '$host$serverPath/Attendance/facultyAttendance';
+String totalAttendanceAPI = '$host$serverPath/Attendance/TotalAttendance';
+String attendanceByDateAPI = '$host$serverPath/Attendance/AttendanceByDate';
+
+String recentlyPlacedAPI = '$host$serverPath/Placement/recentlyPlaced';
+String campusDriveStudentRoundsAPI = '$host$serverPath/Placement/campusDriveStudentRoundList';
+
+
+String feedbackHistoryAPI = '$host$serverPath/Feedback/by-faculty';
+String feedbackStatusUpdateAPI = '$host$serverPath/Feedback/update-viewed';
+
+String studentDetailsAPI = '$host$serverPath/Student/by-enrolment';
 
 String studentImageAPI(gr) {
   String api =

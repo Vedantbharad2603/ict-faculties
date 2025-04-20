@@ -2,6 +2,7 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:ict_faculties/Helper/Components.dart';
@@ -159,7 +160,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   Flexible(
                       child: DetailWithHeading(
                           HeadingName: "Joining Date",
-                          Details: userData.joiningDate)),
+                          Details: userData.joiningDate.isNotEmpty?DateFormat('dd-MM-yyyy').format(DateTime.parse(userData.joiningDate)):""
+                      ),)
                 ],
               ),
               SizedBox(

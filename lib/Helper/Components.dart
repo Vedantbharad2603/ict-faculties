@@ -254,3 +254,46 @@ Widget Heading1(context, String str, double size, double leftPad) {
     ),
   );
 }
+
+radialIndicator(BuildContext context, double input) {
+  return Stack(
+    alignment: Alignment.center,
+    children: [
+      TweenAnimationBuilder(
+        tween: Tween<double>(begin: 0, end: input),
+        duration: const Duration(seconds: 1),
+        curve: Easing.linear,
+        builder: (context, value, child) {
+          return Center(
+            child: Text(
+              '${value.toStringAsFixed(0)}%',
+              style: TextStyle(
+                fontSize:
+                value < 100 ? getSize(context, 3.5) : getSize(context, 3),
+                fontFamily: "mu_bold",
+                color: muColor,
+              ),
+            ),
+          );
+        },
+      ),
+      TweenAnimationBuilder(
+        tween: Tween<double>(begin: 0, end: input / 100),
+        duration: const Duration(seconds: 1),
+        curve: Easing.linear,
+        builder: (context, value, child) {
+          return SizedBox(
+            width: 70,
+            height: 70,
+            child: CircularProgressIndicator(
+              value: value,
+              backgroundColor: muGrey2,
+              strokeWidth: 6,
+              valueColor: AlwaysStoppedAnimation<Color>(muColor),
+            ),
+          );
+        },
+      ),
+    ],
+  );
+}

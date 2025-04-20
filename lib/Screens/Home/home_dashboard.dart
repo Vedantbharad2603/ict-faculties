@@ -89,9 +89,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   childAspectRatio: 0.85,
                   padding: EdgeInsets.all(10),
                   children: [
-                    TapIcons(context, "Attendance", 2,HugeIcons.strokeRoundedCalendarUpload01, 40, "/regAttendanceSchedule", {'faculty_id': userData.id}),
+                    TapIcons(context, "Punch", 2,HugeIcons.strokeRoundedCalendarCheckIn01, 40, "/punchScreen", {'faculty_id': userData.id}),
+                    TapIcons(context, "Mark Attendance", 2,HugeIcons.strokeRoundedCalendarUpload01, 40, "/regAttendanceSchedule", {'faculty_id': userData.id}),
                     TapIcons(context, "Student Engaged", 2,HugeIcons.strokeRoundedStudentCard, 40, "/engagedStudent", {'faculty_id': userData.id,'faculty_des':userData.designation}),
                     TapIcons(context, "Extra Attendance", 2,HugeIcons.strokeRoundedGoogleSheet,40, "/extraAttendanceSchedule", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    TapIcons(context, "Anonymous Feedback", 2,HugeIcons.strokeRoundedBubbleChatSecure,40, "/feedback", {'faculty_id': userData.id,'faculty_des':userData.designation}),
+                    TapIcons(context, "Student Search", 2,HugeIcons.strokeRoundedUserSearch01,40, "/student-search", null),
                     ],
                 ),
               ),
